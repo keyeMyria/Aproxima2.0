@@ -1,0 +1,117 @@
+  {
+  "project_info": {
+    "project_number": "29966875189",
+    "firebase_url": "https://aproximamais-b84ee.firebaseio.com",
+    "project_id": "aproximamais-b84ee",
+    "storage_bucket": "aproximamais-b84ee.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:29966875189:android:f5f8c2126a85c73e",
+        "android_client_info": {
+          "package_name": "aproxima.org.brunoeleodoro.com"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "29966875189-b8qlrrhf61d6ktjgugc0d0bv1r7d9sbe.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCbXnPT3n-bTsDmTYPfNAk4zWCn88SlnF4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:29966875189:android:48a756ff5384df0d",
+        "android_client_info": {
+          "package_name": "aproxima.org.brunoeleodoro.com.aproxima"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "29966875189-b8qlrrhf61d6ktjgugc0d0bv1r7d9sbe.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCbXnPT3n-bTsDmTYPfNAk4zWCn88SlnF4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:29966875189:android:ce0a5b5f7d1db6f2",
+        "android_client_info": {
+          "package_name": "com.brunoeleodoro.org.aproxima"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "29966875189-dph3h0rhhuo5n4m2mbiph3eqqkfha71m.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.brunoeleodoro.org.aproxima",
+            "certificate_hash": "29e4c3876b6e1ab6d9e9dfd470e21c617a9be9d7"
+          }
+        },
+        {
+          "client_id": "29966875189-b8qlrrhf61d6ktjgugc0d0bv1r7d9sbe.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCbXnPT3n-bTsDmTYPfNAk4zWCn88SlnF4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "29966875189-hpe6s3t4bt208922dk4dtvrpeoiqc2us.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
