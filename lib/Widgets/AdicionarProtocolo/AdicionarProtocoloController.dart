@@ -182,7 +182,7 @@ class AdicionarProtocoloController implements BlocBase {
     });
   }
 
-  Future CadastrarProtocolo(String descricao) {
+  Future CadastrarProtocolo(String descricao, String titulo) {
     List<Foto> f = new List();
     return outFotos.first.then((fotos) {
       if (fotos != null) {
@@ -226,7 +226,7 @@ class AdicionarProtocoloController implements BlocBase {
             var body = {
               'lat': latlng.latitude.toString(),
               'lng': latlng.longitude.toString(),
-              'titulo': '',
+              'titulo': titulo,
               'descricao': descricao,
               'id_status': '1',
               'user_id': Helpers.user.id.toString(),
@@ -239,10 +239,10 @@ class AdicionarProtocoloController implements BlocBase {
               'User_updatable': '0',
             };
             print(
-                'Body ${body} URL: http://www.aproximamais.net/webservice/json.php?cadastrarprotocolo=true');
+                'Body ${body} URL: http://www.aproximamais.net/webservice/json.php?cadastrarprotocolo=true&t=${DateTime.now().millisecondsSinceEpoch}');
             return http
                 .post(
-                    'http://www.aproximamais.net/webservice/json.php?cadastrarprotocolo=true',
+                    'http://www.aproximamais.net/webservice/json.php?cadastrarprotocolo=true&t=${DateTime.now().millisecondsSinceEpoch}',
                     body: body)
                 .then((response) {
               print('Protocolo RESPONSE ${response.body}');
@@ -264,10 +264,10 @@ class AdicionarProtocoloController implements BlocBase {
                   'idtags': jsonEncode(tags)
                 };
                 print(
-                    'Body ${tagbody} URL: http://www.aproximamais.net/webservice/json.php?inserirtagprotcolo=true');
+                    'Body ${tagbody} URL: http://www.aproximamais.net/webservice/json.php?inserirtagprotcolo=true&t=${DateTime.now().millisecondsSinceEpoch}');
                 return http
                     .post(
-                        'http://www.aproximamais.net/webservice/json.php?inserirtagprotcolo=true',
+                        'http://www.aproximamais.net/webservice/json.php?inserirtagprotcolo=true&t=${DateTime.now().millisecondsSinceEpoch}',
                         body: tagbody)
                     .then((responseTag) async {
                   print('TAG RESPONSE ${responseTag.body}');
@@ -287,7 +287,7 @@ class AdicionarProtocoloController implements BlocBase {
                     p.tags.add(new Tagss(t.id, p.id, t, 0));
                     var fotosArrayBody;
                     List fotosJson = new List();
-                    for (Foto ff in fotos) {
+                    for (Foto ff in f) {
                       var fileName = _randomString(20) + ".jpeg";
                       String base64Image =
                           base64Encode(File(ff.link).readAsBytesSync());
@@ -301,11 +301,13 @@ class AdicionarProtocoloController implements BlocBase {
                       }));
                     }
                     fotosArrayBody = {'fotos': json.encode(fotosJson)};
+                    print('Fotos Body ${fotosArrayBody}');
                     print(
-                        'Body ${fotosArrayBody} URL: http://www.aproximamais.net/webservice/json.php?CadastrarFotos=true');
+                        'URL URL: http://www.aproximamais.net/webservice/json.php?CadastrarFotos=true&t=${DateTime.now().millisecondsSinceEpoch}');
+                    print('NUMITENS ${fotosJson.length}');
                     return http
                         .post(
-                            'http://www.aproximamais.net/webservice/json.php?CadastrarFotos=true',
+                            'http://www.aproximamais.net/webservice/json.php?CadastrarFotos=true&t=${DateTime.now().millisecondsSinceEpoch}',
                             body: fotosArrayBody)
                         .then((responseFotos) async {
                       print('FOTO RESPONSE ${responseFotos.body}');

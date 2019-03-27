@@ -205,7 +205,7 @@ class ActivityFeedItem extends StatelessWidget {
               "{id}/{z}/{x}/{y}@2x.png?access_token=sk.eyJ1IjoicmJzb2Z0d2FyZSIsImEiOiJjam5xYng1aG8wMG55M3hreXJlZmVxMjA1In0.NBY7xfp9rERgMM3Ub1iwFg",
           additionalOptions: {
             'accessToken':
-            'sk.eyJ1IjoicmJzb2Z0d2FyZSIsImEiOiJjam5xYng1aG8wMG55M3hreXJlZmVxMjA1In0.NBY7xfp9rERgMM3Ub1iwFg',
+                'sk.eyJ1IjoicmJzb2Z0d2FyZSIsImEiOiJjam5xYng1aG8wMG55M3hreXJlZmVxMjA1In0.NBY7xfp9rERgMM3Ub1iwFg',
             'id': 'mapbox.streets',
           },
         ),
@@ -510,7 +510,7 @@ class ActivityFeedItem extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.only(left: 8.0, top: 5.0),
                 child: Text(
-                  post.cidade.cidade,
+                  '${post.created_at.day}/${post.created_at.month}/${post.created_at.year}',
                   textAlign: TextAlign.start,
                   style: TextStyle(fontWeight: FontWeight.normal, fontSize: 15),
                 ),

@@ -47,6 +47,7 @@ class _AdicionarProtocoloWidgetState extends State<AdicionarProtocoloWidget>
   Animation<double> animation;
   AnimationController animcontroller;
   TextEditingController DescricaoController = TextEditingController();
+  TextEditingController TituloController = TextEditingController();
 
   TapGestureRecognizer _longPressRecognizer;
   @override
@@ -178,7 +179,7 @@ class _AdicionarProtocoloWidgetState extends State<AdicionarProtocoloWidget>
                       child: Padding(
                           padding: EdgeInsets.all(10),
                           child: Container(
-                              height: 350,
+                              height: MediaQuery.of(context).size.height * .4,
                               width: MediaQuery.of(context).size.width * 9,
                               child: new FlutterMap(
                                 options: new MapOptions(
@@ -275,6 +276,26 @@ class _AdicionarProtocoloWidgetState extends State<AdicionarProtocoloWidget>
           Padding(
               padding: EdgeInsets.fromLTRB(10, 5, 10, 0),
               child: TextField(
+                  controller: TituloController,
+                  maxLines: 1,
+                  autocorrect: true,
+                  enabled: true,
+                  textCapitalization: TextCapitalization.sentences,
+                  textAlign: TextAlign.start,
+                  decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Colors.grey[400],
+                              width: 4,
+                              style: BorderStyle.solid)),
+                      hintText: 'Buraco no meio da rua',
+                      labelText: 'Titulo',
+                      labelStyle: TextStyle(
+                        color: Colors.blue,
+                      )))),
+          Padding(
+              padding: EdgeInsets.fromLTRB(10, 5, 10, 0),
+              child: TextField(
                 controller: DescricaoController,
                 maxLines: 13,
                 autocorrect: true,
@@ -349,57 +370,63 @@ class _AdicionarProtocoloWidgetState extends State<AdicionarProtocoloWidget>
                             } else {
                               if (DescricaoController.text != null ||
                                   DescricaoController.text != '') {
-                                apc.CadastrarProtocolo(DescricaoController.text)
-                                    .then((resultado) {
-                                  print('Resultado : ${resultado}');
-                                  switch (resultado) {
-                                    case 0:
-                                      //TODO SEM FOTOS
-                                      break;
-                                    case 1:
-                                      //TODO SEM TAG
-                                      break;
-                                    case 2:
-                                      //TODO SEM LOCALIZAÇÂO
-                                      break;
-                                    case 3:
-                                      //TODO ERRO AO CADASTRAR PROTOCOLO;
-                                      break;
-                                    case 4:
-                                      //TODO ERRO AO CADASTRAR TAG;
-                                      break;
-                                    case 5:
-
-                                      //TODO ERRO AO CADASTRAR FOTOS
-                                      break;
-                                    case 6:
-                                      //TODO TUDO CERTO;
-                                      Navigator.of(context).pop();
-                                      Helpers.nh.sendNotification({
-                                        'title':
-                                            '${Helpers.user.nome} Fez um Relato ${apc.protocolo.titulo}',
-                                        'responsavel':
-                                            json.encode(Helpers.user),
-                                        'tipo': 0.toString(),
-                                        'sujeito': apc.protocolo.id.toString(),
-                                        'topic':
-                                            '${Helpers.user.cidade.cidade}',
-                                        'foto': Helpers.user.foto == null
-                                            ? 'https://www.rd.com/wp-content/uploads/2017/09/01-shutterstock_476340928-Irina-Bg-1024x683.jpg'
-                                            : Helpers.user.foto,
-                                        'data': DateTime.now()
-                                            .millisecondsSinceEpoch
-                                            .toString(),
-                                      });
-                                      print('Protocolo AQUI ${apc.protocolo}');
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  ComentarioPage(
-                                                      apc.protocolo)));
-                                  }
-                                });
+                                if (TituloController.text != null ||
+                                    TituloController.text != '') {
+                                  apc.CadastrarProtocolo(
+                                          DescricaoController.text,
+                                          TituloController.text)
+                                      .then((resultado) {
+                                    print('Resultado : ${resultado}');
+                                    switch (resultado) {
+                                      case 0:
+                                        //TODO SEM FOTOS
+                                        break;
+                                      case 1:
+                                        //TODO SEM TAG
+                                        break;
+                                      case 2:
+                                        //TODO SEM LOCALIZAÇÂO
+                                        break;
+                                      case 3:
+                                        //TODO ERRO AO CADASTRAR PROTOCOLO;
+                                        break;
+                                      case 4:
+                                        //TODO ERRO AO CADASTRAR TAG;
+                                        break;
+                                      case 5:
+                                        //TODO ERRO AO CADASTRAR FOTOS
+                                        break;
+                                      case 6:
+                                        //TODO TUDO CERTO;
+                                        Navigator.of(context).pop();
+                                        Helpers.nh.sendNotification({
+                                          'title':
+                                              '${Helpers.user.nome} Fez um Relato ${apc.protocolo.titulo}',
+                                          'responsavel':
+                                              json.encode(Helpers.user),
+                                          'tipo': 0.toString(),
+                                          'sujeito':
+                                              apc.protocolo.id.toString(),
+                                          'topic':
+                                              '${Helpers.user.cidade.cidade}',
+                                          'foto': Helpers.user.foto == null
+                                              ? 'https://www.rd.com/wp-content/uploads/2017/09/01-shutterstock_476340928-Irina-Bg-1024x683.jpg'
+                                              : Helpers.user.foto,
+                                          'data': DateTime.now()
+                                              .millisecondsSinceEpoch
+                                              .toString(),
+                                        });
+                                        print(
+                                            'Protocolo AQUI ${apc.protocolo}');
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    ComentarioPage(
+                                                        apc.protocolo)));
+                                    }
+                                  });
+                                }
                               } else {
                                 showDialog(
                                     context: context,

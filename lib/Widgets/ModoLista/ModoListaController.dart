@@ -104,6 +104,8 @@ class ModoListaController implements BlocBase {
     inisFilteringBySecretaria.add(isFilteringBySecretaria);
     inShowFilters.add(showFilters);
     //TODO alterar id da cidade de acordo com a cidade do usuario
+    print(
+        'http://www.aproximamais.net/webservice/json.php?buscaprotocolocidade=${Helpers.user.cidade.id_cidade}');
     http
         .get(
             'http://www.aproximamais.net/webservice/json.php?buscaprotocolocidade=${Helpers.user.cidade.id_cidade}')
@@ -126,6 +128,7 @@ class ModoListaController implements BlocBase {
         }
       }
       print('ADICIONANDO ${Protocolos.length} a lista');
+      Protocolos = OrderByDate(Protocolos);
       inModoLista.add(Protocolos);
     });
 
@@ -183,6 +186,7 @@ class ModoListaController implements BlocBase {
       }
       FiltroFinal = FilterBySecretaria(s, FiltroFinal);
     }
+    FiltroFinal = OrderByDate(FiltroFinal);
     inModoLista.add(FiltroFinal);
   }
 
@@ -210,6 +214,11 @@ class ModoListaController implements BlocBase {
         "AQUI DEMONIOS PARAMENTRO DE BUSCA >>${d1.toIso8601String()}, ${d2.toIso8601String()} ${filtropordata.length} <TAMANHO ${filtropordata.toString()}");
     UpdateFilterByDate(true);
     return filtropordata;
+  }
+
+  List<Protocolo> OrderByDate(List<Protocolo> lista) {
+    lista.sort((p1, p2) => p2.created_at.compareTo(p1.created_at));
+    return lista;
   }
 
   List<Protocolo> FilterByStatus(Choice c, List<Protocolo> lista) {
