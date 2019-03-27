@@ -55,10 +55,10 @@ class UserRelatos extends StatelessWidget {
                   children: <Widget>[
                     Text(
                       'Carregando Dados',
-                      style: TextStyle(color: Colors.green, fontSize: 32.0),
+                      style: TextStyle(color: Colors.blue, fontSize: 32.0),
                     ),
                     SpinKitThreeBounce(
-                      color: Colors.green,
+                      color: Colors.blue,
                       size: 50.0,
                     )
                   ],

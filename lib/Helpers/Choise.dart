@@ -1,3 +1,4 @@
+import 'package:aproxima/Helpers/Helpers.dart';
 import 'package:flutter/material.dart';
 
 class Choice {
@@ -20,12 +21,18 @@ const List<Choice> MenuPrincipal = const <Choice>[
   const Choice(title: 'Sair', icon: Icons.exit_to_app),
 ];
 
-const List<Choice> StatusChoises = const <Choice>[
-  const Choice(title: 'Enviado', icon: Icons.place, color: Colors.yellow),
-  const Choice(title: 'Encaminhado', icon: Icons.place, color: Colors.orange),
-  const Choice(title: 'Em Andamento', icon: Icons.place, color: Colors.cyan),
-  const Choice(title: 'Concluido', icon: Icons.place, color: Colors.green),
-  const Choice(title: 'Excluido', icon: Icons.place, color: Colors.red),
+List<Choice> StatusChoises = <Choice>[
+  Helpers.user.permissao >= 2
+      ? Choice(title: 'Enviado', icon: Icons.place, color: Colors.yellowAccent)
+      : {},
+  Helpers.user.permissao >= 3
+      ? Choice(title: 'Excluído', icon: Icons.place, color: Colors.red)
+      : {},
+  Choice(title: 'Encaminhado', icon: Icons.place, color: Colors.orangeAccent),
+  Choice(
+      title: 'Em Andamento', icon: Icons.place, color: Colors.lightBlueAccent),
+  Choice(title: 'Concluído', icon: Icons.place, color: Colors.greenAccent),
+  Choice(title: 'Todos', icon: Icons.all_inclusive, color: Colors.blueAccent),
 ];
 
 class ChoiceCard extends StatelessWidget {
@@ -41,7 +48,7 @@ class ChoiceCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          Icon(choice.icon, color: textStyle.color),
+          Icon(choice.icon, color: choice.color),
           Padding(
             padding: EdgeInsets.only(left: 5.0),
           ),

@@ -1,60 +1,44 @@
 import 'dart:convert';
 
 import 'package:aproxima/Objetos/Tag.dart';
-import 'package:aproxima/Objetos/Tagss.dart';
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:http/http.dart' as http;
 import 'package:rxdart/rxdart.dart';
 
 class TagsController implements BlocBase {
   static List<Tag> tags;
-  List<Tag> SelectedTags;
+  Tag SelectedTag;
   BehaviorSubject<List<Tag>> _controllerTags = new BehaviorSubject<List<Tag>>();
 
   Stream<List<Tag>> get outTags => _controllerTags.stream;
 
   Sink<List<Tag>> get inTags => _controllerTags.sink;
 
-  BehaviorSubject<List<Tag>> _controllerSelectedTags =
-      new BehaviorSubject<List<Tag>>();
+  BehaviorSubject<Tag> _controllerSelectedTags = new BehaviorSubject<Tag>();
 
-  Stream<List<Tag>> get outSelectedTags => _controllerSelectedTags.stream;
+  Stream<Tag> get outSelectedTag => _controllerSelectedTags.stream;
 
-  Sink<List<Tag>> get inSelectedTags => _controllerSelectedTags.sink;
+  Sink<Tag> get inSelectedTag => _controllerSelectedTags.sink;
   @override
   void dispose() {
     _controllerTags.close();
     _controllerSelectedTags.close();
   }
 
-  addToSelectedTag(Tag t) {
-    if (SelectedTags == null) {
-      SelectedTags = new List();
-    }
-    bool contains = false;
-    for (Tag tt in SelectedTags) {
-      if (tt.id == t.id) {
-        contains = true;
+  addToSelectedTag(Tag tag) {
+    for (Tag t in tags) {
+      if (t.id == tag.id) {
+        t.isSelected = true;
+      } else {
+        t.isSelected = false;
       }
     }
-    if (!contains) {
-      SelectedTags.add(t);
-      SelectedTags.sort((a, b) => a.tag_nome.compareTo(b.tag_nome));
-      inSelectedTags.add(SelectedTags);
-      for (Tag tt in tags) {
-        if (tt.id == t.id) {
-          tags.remove(tt);
-        }
-      }
-      tags.sort((a, b) => a.tag_nome.compareTo(b.tag_nome));
-      inTags.add(tags);
-    }
+    SelectedTag = tag;
+    tags.sort((a, b) => a.tag_nome.compareTo(b.tag_nome));
+    inTags.add(tags);
   }
 
   TagsController() {
-    if (SelectedTags == null) {
-      SelectedTags = new List();
-    }
     if (tags == null) {
       tags = new List();
       //TODO alterar id da cidade de acordo com a cidade do usuario
@@ -65,7 +49,9 @@ class TagsController implements BlocBase {
         var j = json.decode(response.body);
         for (var v in j) {
           print('TAGG ${v.toString()}');
-          tags.add(new Tag.fromJson(v));
+          Tag t = new Tag.fromJson(v);
+          t.isSelected = false;
+          tags.add(t);
         }
         inTags.add(tags);
       });
@@ -74,20 +60,15 @@ class TagsController implements BlocBase {
     }
   }
 
-  void removeSelectedTag(Tag t) {
-    SelectedTags.remove(t);
-    SelectedTags.sort((a, b) => a.tag_nome.compareTo(b.tag_nome));
-    inSelectedTags.add(SelectedTags);
-    tags.add(t);
+  void removeSelectedTag(Tag tag) {
+    for (Tag t in tags) {
+      if (t.id == tag.id) {
+        t.isSelected = false;
+      }
+    }
+    SelectedTag = null;
     tags.sort((a, b) => a.tag_nome.compareTo(b.tag_nome));
     inTags.add(tags);
-  }
-
-  void setSelectedTags(List<Tagss> tags) {
-    SelectedTags = new List();
-    for (Tagss t in tags) {
-      addToSelectedTag(t.tag);
-    }
   }
 }
 

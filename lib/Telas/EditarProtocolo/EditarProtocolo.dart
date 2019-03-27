@@ -60,7 +60,7 @@ class _EditarProtocoloState extends State<EditarProtocolo> {
                   decoration: InputDecoration(
                       icon: Icon(
                         Icons.border_color,
-                        color: Colors.green,
+                        color: Colors.blue,
                       ),
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(5.0)),
@@ -83,7 +83,7 @@ class _EditarProtocoloState extends State<EditarProtocolo> {
                     decoration: InputDecoration(
                         icon: Icon(
                           Icons.rate_review,
-                          color: Colors.green,
+                          color: Colors.blue,
                         ),
                         border: OutlineInputBorder(
                             borderRadius:
@@ -120,8 +120,8 @@ class _EditarProtocoloState extends State<EditarProtocolo> {
     plc.outLocation.first.then((latlng) {
       p.lat = latlng.latitude;
       p.lng = latlng.longitude;
-      tc.outSelectedTags.first.then((tags) {
-        Tag t = tags[0];
+      tc.outSelectedTag.first.then((tags) {
+        Tag t = tags;
         epc.AtualizarProtocolo(p, t).then((b) {
           if (b) {
             Scaffold.of(context).showSnackBar(SnackBar(

@@ -6,6 +6,7 @@ import 'package:aproxima/Objetos/Protocolo.dart';
 import 'package:aproxima/Telas/Comentario/ComentarioController.dart';
 import 'package:aproxima/Telas/EditarProtocolo/EditarProtocolo.dart';
 import 'package:aproxima/Telas/ProtocoloTop/UpdatePostTop.dart';
+import 'package:aproxima/Telas/UpdateProtocolo/UpdateProtocolo.dart';
 import 'package:aproxima/Telas/UserProfile/friend_details_page.dart';
 import 'package:aproxima/Widgets/FeedUtils/Feed.dart';
 import 'package:bloc_pattern/bloc_pattern.dart';
@@ -28,159 +29,197 @@ class _ComentarioPageState extends State<ComentarioPage> {
   ComentarioController cpc;
   @override
   Widget build(BuildContext context) {
+    print('Protocolo AQUI ${widget.p.toString()}');
     cpc = ComentarioController(widget.p);
     sc = new ScrollController();
-    return Scaffold(
-      body: Stack(children: <Widget>[
-        ListView(
-          children: <Widget>[
-            UpdatePostTop(widget.p.updates_protocolos, widget.p),
-            ActivityFeedItem(
-              protocolo: widget.p,
-              hideComment: true,
-            ),
-            BlocProvider(
-              child: FirebaseAnimatedList(
-                  query: FirebaseDatabase.instance
-                      .reference()
-                      .child('Protocolos')
-                      .child(widget.p.id.toString())
-                      .child('Comentarios'),
-                  shrinkWrap: true,
-                  duration: Duration(seconds: 1),
-                  scrollDirection: Axis.vertical,
-                  physics: ScrollPhysics(),
-                  sort: (DataSnapshot a, DataSnapshot b) =>
-                      b.key.compareTo(a.key),
-                  controller: sc,
-                  itemBuilder: (context, snapshot, anim, index) {
-                    return buildComentarioItem(Comentario.toJson(
-                        snapshot.value)); // buildComentarioItem();
-                  }),
-              bloc: cpc,
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(
-                  vertical: MediaQuery.of(context).size.height * .045),
-            )
-          ],
-        ),
-        Positioned(
-          bottom: 0,
-          child: Container(
-              color: Colors.grey[200],
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height * .09,
-              margin: EdgeInsets.symmetric(horizontal: 7),
-              child: Row(
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 2),
-                  ),
-                  Expanded(
-                    flex: 100,
-                    child: TextFormField(
-                        textAlign: TextAlign.start,
-                        controller: _commentController,
-                        maxLines: 1,
-                        autocorrect: true,
-                        enableInteractiveSelection: true,
-                        keyboardAppearance: Brightness.dark,
-                        onFieldSubmitted: (t) {
-                          cpc.addComment(new Comentario(Helpers.user, null,
-                              DateTime.now(), _commentController.text, null));
-                          _commentController.text = '';
-                        },
-                        keyboardType: TextInputType.text,
-                        decoration: InputDecoration(
-                            hintText: 'Diga algo sobre isso',
-                            contentPadding:
-                                new EdgeInsets.fromLTRB(15, 15, 15, 15),
-                            fillColor: Colors.white,
-                            filled: true,
-                            focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15),
-                                borderSide:
-                                    BorderSide(color: Colors.white, width: 0)),
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15),
-                                borderSide: BorderSide(
-                                    color: Colors.white, width: 0)))),
-                  ),
-                  Padding(
-                    padding:
-                        EdgeInsets.only(top: 2, bottom: 2, left: 2, right: 3),
-                  ),
-                  Container(
-                      margin: EdgeInsets.symmetric(vertical: 2, horizontal: 2),
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(60.0),
-                          border:
-                              Border.all(color: Colors.black87, width: 0.1)),
-                      child: IconButton(
-                        onPressed: () {
-                          print('ChAMOU ON PRESSED');
-                          cpc.addComment(new Comentario(Helpers.user, null,
-                              DateTime.now(), _commentController.text, null));
-                          Helpers.fbmsg.subscribeToTopic(
-                              'protocoloteste' + widget.p.id.toString());
-                          Helpers.nh.sendNotification({
-                            'title':
-                                '${Helpers.user.nome} Comentou: ${_commentController.text} no Relato ${widget.p.titulo}',
-                            'responsavel': json.encode(Helpers.user),
-                            'tipo': 0.toString(),
-                            'sujeito': widget.p.id.toString(),
-                            'topic': 'protocoloteste' + widget.p.id.toString(),
-                            'foto': Helpers.user.foto == null
-                                ? 'https://www.rd.com/wp-content/uploads/2017/09/01-shutterstock_476340928-Irina-Bg-1024x683.jpg'
-                                : Helpers.user.foto,
-                            'data': DateTime.now()
-                                .millisecondsSinceEpoch
-                                .toString(),
-                          });
 
-                          _commentController.text = '';
-                          FocusScope.of(context).requestFocus(new FocusNode());
-                          sc.animateTo(0,
-                              duration: Duration(milliseconds: 400),
-                              curve: Curves.decelerate);
-                          sc.attach(sc.position);
-                        },
-                        icon: Icon(
-                          Icons.send,
-                          color: Colors.green,
-                        ),
-                      )),
-                  new Divider(),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 5),
+    return StreamBuilder(
+        stream: cpc.outProtocolo,
+        builder: (context, AsyncSnapshot<Protocolo> snapProtocolo) {
+          print('AQUI FDP UPDATES ${snapProtocolo.data.updates_protocolos}');
+          return Scaffold(
+            body: Stack(children: <Widget>[
+              ListView(
+                children: <Widget>[
+                  snapProtocolo.data.updates_protocolos != null
+                      ? UpdatePostTop(snapProtocolo.data.updates_protocolos,
+                          snapProtocolo.data)
+                      : Container(),
+                  ActivityFeedItem(
+                    protocolo: snapProtocolo.data,
+                    hideComment: true,
                   ),
+                  BlocProvider(
+                    child: FirebaseAnimatedList(
+                        query: FirebaseDatabase.instance
+                            .reference()
+                            .child('Protocolos')
+                            .child(snapProtocolo.data.id.toString())
+                            .child('Comentarios'),
+                        shrinkWrap: true,
+                        duration: Duration(seconds: 1),
+                        scrollDirection: Axis.vertical,
+                        physics: ScrollPhysics(),
+                        sort: (DataSnapshot a, DataSnapshot b) =>
+                            b.key.compareTo(a.key),
+                        controller: sc,
+                        itemBuilder: (context, snapshot, anim, index) {
+                          return buildComentarioItem(Comentario.toJson(
+                              snapshot.value)); // buildComentarioItem();
+                        }),
+                    bloc: cpc,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                        vertical: MediaQuery.of(context).size.height * .045),
+                  )
                 ],
-              )),
-        ),
-      ]),
-      appBar: new AppBar(
-        actions: <Widget>[
-          Helpers.user.id == widget.p.user_id || Helpers.user.permissao >= 2
-              ? IconButton(
-                  icon: Icon(Icons.border_color),
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => EditarProtocolo(widget.p)));
-                  },
-                )
-              : new Container()
-        ],
-        title: new Text(
-          widget.p.titulo,
-          style: new TextStyle(color: Colors.white),
-        ),
-        backgroundColor: Colors.green,
-      ),
-    );
+              ),
+              Positioned(
+                bottom: 0,
+                child: Container(
+                    color: Colors.grey[200],
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height * .09,
+                    margin: EdgeInsets.symmetric(horizontal: 7),
+                    child: Row(
+                      children: <Widget>[
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 2),
+                        ),
+                        Expanded(
+                          flex: 100,
+                          child: TextFormField(
+                              textAlign: TextAlign.start,
+                              controller: _commentController,
+                              maxLines: 1,
+                              autocorrect: true,
+                              enableInteractiveSelection: true,
+                              keyboardAppearance: Brightness.dark,
+                              onFieldSubmitted: (t) {
+                                cpc.addComment(new Comentario(
+                                    Helpers.user,
+                                    null,
+                                    DateTime.now(),
+                                    _commentController.text,
+                                    null));
+                                _commentController.text = '';
+                              },
+                              keyboardType: TextInputType.text,
+                              decoration: InputDecoration(
+                                  hintText: 'Diga algo sobre isso',
+                                  contentPadding:
+                                      new EdgeInsets.fromLTRB(15, 15, 15, 15),
+                                  fillColor: Colors.white,
+                                  filled: true,
+                                  focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(15),
+                                      borderSide: BorderSide(
+                                          color: Colors.white, width: 0)),
+                                  border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(15),
+                                      borderSide: BorderSide(
+                                          color: Colors.white, width: 0)))),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(
+                              top: 2, bottom: 2, left: 2, right: 3),
+                        ),
+                        Container(
+                            margin: EdgeInsets.symmetric(
+                                vertical: 2, horizontal: 2),
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(60.0),
+                                border: Border.all(
+                                    color: Colors.black87, width: 0.1)),
+                            child: IconButton(
+                              onPressed: () {
+                                print('ChAMOU ON PRESSED');
+                                cpc.addComment(new Comentario(
+                                    Helpers.user,
+                                    null,
+                                    DateTime.now(),
+                                    _commentController.text,
+                                    null));
+                                Helpers.fbmsg.subscribeToTopic(
+                                    'protocoloteste' +
+                                        snapProtocolo.data.id.toString());
+                                Helpers.nh.sendNotification({
+                                  'title':
+                                      '${Helpers.user.nome} Comentou: ${_commentController.text} no Relato ${snapProtocolo.data.titulo}',
+                                  'responsavel': json.encode(Helpers.user),
+                                  'tipo': 0.toString(),
+                                  'sujeito': snapProtocolo.data.id.toString(),
+                                  'topic': 'protocoloteste' +
+                                      snapProtocolo.data.id.toString(),
+                                  'foto': Helpers.user.foto == null
+                                      ? 'https://www.rd.com/wp-content/uploads/2017/09/01-shutterstock_476340928-Irina-Bg-1024x683.jpg'
+                                      : Helpers.user.foto,
+                                  'data': DateTime.now()
+                                      .millisecondsSinceEpoch
+                                      .toString(),
+                                });
+
+                                _commentController.text = '';
+                                FocusScope.of(context)
+                                    .requestFocus(new FocusNode());
+                                sc.animateTo(0,
+                                    duration: Duration(milliseconds: 400),
+                                    curve: Curves.decelerate);
+                                sc.attach(sc.position);
+                              },
+                              icon: Icon(
+                                Icons.send,
+                                color: Colors.blue,
+                              ),
+                            )),
+                        new Divider(),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 5),
+                        ),
+                      ],
+                    )),
+              ),
+            ]),
+            appBar: new AppBar(
+              actions: <Widget>[
+                Helpers.user.id == snapProtocolo.data.user_id ||
+                        Helpers.user.permissao >= 2
+                    ? IconButton(
+                        icon: Icon(Icons.edit),
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      EditarProtocolo(snapProtocolo.data)));
+                        },
+                      )
+                    : new Container(),
+                Helpers.user.id == snapProtocolo.data.user_id ||
+                        Helpers.user.permissao >= 2
+                    ? IconButton(
+                        icon: Icon(
+                          Icons.add,
+                          color: Colors.white,
+                          semanticLabel: 'Dar Andamento',
+                        ),
+                        onPressed: () {
+                          AddUpdateProtocolo().showDialogUpdate(
+                              snapProtocolo.data, context, cpc);
+                        },
+                      )
+                    : new Container()
+              ],
+              title: new Text(
+                snapProtocolo.data.titulo,
+                style: new TextStyle(color: Colors.white),
+              ),
+              backgroundColor: Colors.blue,
+            ),
+          );
+        });
   }
 
   Widget buildComentarioItem(Comentario c) {

@@ -188,10 +188,10 @@ class _FotoPageState extends State<FotoPage> {
             height: 30.0,
             width: 30.0,
             decoration: BoxDecoration(
-              color: i == selecionado ? Colors.green : Colors.transparent,
+              color: i == selecionado ? Colors.blue : Colors.transparent,
               shape: BoxShape.circle,
               border: Border.all(
-                  color: Colors.green, width: 1.0, style: BorderStyle.solid),
+                  color: Colors.blue, width: 1.0, style: BorderStyle.solid),
             ),
           )));
     }

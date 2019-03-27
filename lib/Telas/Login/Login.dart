@@ -19,6 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class LoginPage extends StatefulWidget {
@@ -127,7 +128,7 @@ class _LoginPageState extends State<LoginPage> {
 
     _list = ListModel<String>(
       listKey: _listKey,
-      initialItems: <String>['Bem Vindo ao Aproxima+'],
+      initialItems: <String>['Bem Vindo ao AproximA+'],
       removedItemBuilder: _buildRemovedItem,
     );
     Future.delayed(Duration(seconds: 4)).then((d) {
@@ -172,7 +173,8 @@ class _LoginPageState extends State<LoginPage> {
         _selectedItem == null ? _list.length : _list.indexOf(_selectedItem);
     if (index == 2) {
       try {
-        _list.insert(index, 'Bem como informa a Prefeitura sobre problemas');
+        _list.insert(index,
+            'Melhor... Poderá informar a prefeitura sobre problemas que afetam o cotidiano da sua cidade!!');
       } catch (err) {
         print(err);
       }
@@ -180,7 +182,7 @@ class _LoginPageState extends State<LoginPage> {
     if (index == 1) {
       try {
         _list.insert(
-            index, 'Aqui você fica por dentro das novidades da prefeitura');
+            index, 'Aqui você fica por dentro das novidades do seu municipio!');
       } catch (err) {
         print(err);
       }
@@ -214,7 +216,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void whatsAppOpen() async {
-    print('ENTROU AQUI');
+    //print('ENTROU AQUI');
     var whatsappUrl =
         "whatsapp://send?phone=5542999319375&text=Ola, Gostaria de Conversar sobre o Aplicativo AproximaMais,";
     if (await canLaunch(whatsappUrl)) {
@@ -224,12 +226,10 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  var emailController = TextEditingController(text: 'vergil009@hotmail.com');
-  var senhaController = TextEditingController(text: '123456');
+  var emailController = TextEditingController(text: '');
+  var senhaController = TextEditingController(text: '');
   @override
   Widget build(BuildContext context) {
-    lc.inEmail.add('vergil009@hotmail.com');
-    lc.inSenha.add('123456');
     return new Scaffold(
         key: scaffoldKey,
         floatingActionButton: FloatingActionButton(
@@ -255,9 +255,9 @@ class _LoginPageState extends State<LoginPage> {
                   // Colors are easy thanks to Flutter's
                   // Colors class.
                   Colors.blue[800],
-                  Colors.green[700],
-                  Colors.green[600],
-                  Colors.green[400],
+                  Colors.blue[700],
+                  Colors.blue[600],
+                  Colors.blue[400],
                 ],
               ),
             ),
@@ -285,6 +285,12 @@ class _LoginPageState extends State<LoginPage> {
                         child: StreamBuilder(
                             stream: lc.outEmail,
                             builder: (context, snap) {
+                              if (emailController.text == '' ||
+                                  emailController.text == null) {
+                                if (snap.hasData) {
+                                  emailController.text = snap.data;
+                                }
+                              }
                               return TextField(
                                 key: new Key('Email'),
                                 controller: emailController,
@@ -313,8 +319,19 @@ class _LoginPageState extends State<LoginPage> {
                     Padding(
                         padding: EdgeInsets.all(20.0),
                         child: StreamBuilder(
-                            stream: lc.outEmail,
+                            stream: lc.outSenha,
                             builder: (context, snap) {
+                              if (senhaController.text == '' ||
+                                  senhaController.text == null) {
+                                if (snap.hasData) {
+                                  senhaController.text = snap.data;
+                                  lc.doAutoLogin().then((isLoginOut) {
+                                    if (!isLoginOut) {
+                                      doLogin();
+                                    }
+                                  });
+                                }
+                              }
                               return TextField(
                                 obscureText: true,
                                 controller: senhaController,
@@ -344,22 +361,7 @@ class _LoginPageState extends State<LoginPage> {
                     new Row(
                       children: <Widget>[
                         new RaisedButton(
-                          onPressed: () {
-                            if (emailController.text != '') {
-                              if (senhaController.text != '') {
-                                lc.EfetuarLogin().then((b) {
-                                  if (b) {
-                                    Navigator.pop(context);
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => ModoListaPage(),
-                                        ));
-                                  }
-                                });
-                              }
-                            }
-                          },
+                          onPressed: () => doLogin(),
                           child: new Text(
                             'Entrar',
                             style: txs,
@@ -420,7 +422,7 @@ class _LoginPageState extends State<LoginPage> {
     print(n.toString());
     switch (n.tipo) {
       case 0:
-        print('Entrou aqui case 0');
+        //print('Entrou aqui case 0');
         print(
             ' http://www.aproximamais.net/webservice/json.php?buscaprotocoloid=' +
                 n.sujeito);
@@ -475,5 +477,38 @@ class _LoginPageState extends State<LoginPage> {
         });
       },
     );
+  }
+
+  doLogin() {
+    if (emailController.text != '') {
+      if (senhaController.text != '') {
+        lc.inEmail.add(emailController.text);
+        lc.inSenha.add(senhaController.text);
+        lc.EfetuarLogin().then((b) {
+          if (b) {
+            SharedPreferences.getInstance().then((sp) {
+              sp.getBool('FirstLogin') == null
+                  ? sp.setBool('FirstLogin', true)
+                  : null;
+              if (!sp.getBool('FirstLogin')) {
+                Navigator.pop(context);
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ModoListaPage(),
+                    ));
+              } else {
+                Navigator.pop(context);
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ModoListaPage(),
+                    ));
+              }
+            });
+          }
+        });
+      }
+    }
   }
 }

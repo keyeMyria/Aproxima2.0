@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:aproxima/Helpers/Helpers.dart';
 import 'package:aproxima/Objetos/User.dart';
@@ -12,16 +13,23 @@ class UserEditController implements BlocBase {
   UserEditController(User user) {
     inUser.add(user);
   }
+
+  BehaviorSubject<double> porcentagemVideo = new BehaviorSubject<double>();
+  BehaviorSubject<double> porcentagemImagem = new BehaviorSubject<double>();
   Stream<User> get outUser => _controllerUserEdit.stream;
 
   Sink<User> get inUser => _controllerUserEdit.sink;
+
+  BehaviorSubject<File> _controllerProfilePicture = new BehaviorSubject<File>();
+  Stream<File> get outProfilePicture => _controllerProfilePicture.stream;
+
+  Sink<File> get inProfilePicture => _controllerProfilePicture.sink;
 
   buscarProtocoloPorUsuario(String id) {}
 
   Future<bool> AtualizarPerfil(User u) {
     var url =
         'http://www.aproximamais.net/webservice/json.php?atualizaruser=true';
-    print('AQUI MERDA');
     return http.post(url, body: {
       'id': u.id.toString(),
       'nome': u.nome.toString(),
@@ -40,6 +48,7 @@ class UserEditController implements BlocBase {
       print("Response status USER: ${response.statusCode}");
       print("Response body USER: ${response.body}");
       Helpers.user = User.fromJson(json.decode(response.body));
+      print('USUARIO AQUI ${Helpers.user.toString()}');
       inUser.add(Helpers.user);
       return true;
     }).catchError((err) {
@@ -51,5 +60,6 @@ class UserEditController implements BlocBase {
   @override
   void dispose() {
     _controllerUserEdit.close();
+    _controllerProfilePicture.close();
   }
 }

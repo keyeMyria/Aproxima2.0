@@ -34,10 +34,49 @@ _$UserFromServer(json) {
       json['secretaria_id'] == null ||
               json['secretaria_id'].toString().replaceAll(' ', '') == ''
           ? null
-          : int.parse(json['secretaria_id']));
+          : int.parse(json['secretaria_id']),
+      'https://firebasestorage.googleapis.com/v0/b/aproximamais-b84ee.appspot.com/o/usuarios%2F${int.parse(json['id'].toString())}.jpeg?alt=media&token=5cae4fd3-d3d4-44e4-893a-2349f6fda687}');
 }
 
 User _$UserFromJson(Map<String, dynamic> json) {
+  //print('Entrou AQui ${json}');
+  var d;
+  var c;
+  var j;
+  var k;
+  try {
+    d = json['data_nascimento'] == null
+        ? null
+        : DateTime.parse(json['data_nascimento'] as String);
+  } catch (err) {
+    print('Error na Data: ${err.toString()}');
+    d = null;
+  }
+  try {
+    c = json['created_at'] == null
+        ? null
+        : DateTime.parse(json['created_at'] as String);
+  } catch (err) {
+    print('Error na Data: ${err.toString()}');
+    c = null;
+  }
+
+  try {
+    j = json['updated_at'] == null
+        ? null
+        : DateTime.parse(json['updated_at'] as String);
+  } catch (err) {
+    print('Error na Data: ${err.toString()}');
+    j = null;
+  }
+  try {
+    k = json['deleted_at'] == null
+        ? null
+        : DateTime.parse(json['deleted_at'] as String);
+  } catch (err) {
+    print('Error na Data: ${err.toString()}');
+    k = null;
+  }
   return User(
       int.parse(json['id'].toString()),
       (json['nome'] as String),
@@ -46,20 +85,12 @@ User _$UserFromJson(Map<String, dynamic> json) {
       json['senha_app'] as String,
       json['telefone'] as String,
       json['endereco'] as String,
-      json['dataNascimento'] == null
-          ? null
-          : DateTime.parse(json['dataNascimento'] as String),
+      d,
       int.parse(json['id_cidade'].toString()),
       json['permissao'] != null ? int.parse(json['permissao'].toString()) : 0,
-      json['createdAt'] == null
-          ? null
-          : DateTime.parse(json['createdAt'] as String),
-      json['updatedAt'] == null
-          ? null
-          : DateTime.parse(json['updatedAt'] as String),
-      json['deletedAt'] == null
-          ? null
-          : DateTime.parse(json['deletedAt'] as String),
+      c,
+      j,
+      k,
       json['firebasekey'] as String,
       json['cidade'] == null
           ? null
@@ -67,7 +98,8 @@ User _$UserFromJson(Map<String, dynamic> json) {
       json['secretaria_id'] == null ||
               json['secretaria_id'].toString().replaceAll(' ', '') == ''
           ? null
-          : int.parse(json['secretaria_id']));
+          : int.parse(json['secretaria_id']),
+      'https://firebasestorage.googleapis.com/v0/b/aproximamais-b84ee.appspot.com/o/usuarios%2F${int.parse(json['id'].toString())}.jpeg?alt=media&token=5cae4fd3-d3d4-44e4-893a-2349f6fda687}');
 }
 
 Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{

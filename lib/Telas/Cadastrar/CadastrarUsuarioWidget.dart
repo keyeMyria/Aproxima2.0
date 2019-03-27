@@ -59,7 +59,7 @@ class _CadastrarUsuarioWidgetState extends State<CadastrarUsuarioWidget> {
                         floatingActionButtonLocation:
                             FloatingActionButtonLocation.centerDocked,
                         floatingActionButton: FloatingActionButton(
-                          backgroundColor: Colors.green,
+                          backgroundColor: Colors.blue,
                           onPressed: () {
                             // Validate will return true if the form is valid, or false if
                             // the form is invalid.
@@ -107,13 +107,13 @@ class _CadastrarUsuarioWidgetState extends State<CadastrarUsuarioWidget> {
                             children: <Widget>[
                               IconButton(
                                 icon: Icon(Icons.search),
-                                color: Colors.green,
-                                disabledColor: Colors.green,
+                                color: Colors.blue,
+                                disabledColor: Colors.blue,
                                 onPressed: null,
                               ),
                             ],
                           ),
-                          color: Colors.green,
+                          color: Colors.blue,
                         ),
                         body: new SingleChildScrollView(
                             child: new Padding(
@@ -155,7 +155,7 @@ class _CadastrarUsuarioWidgetState extends State<CadastrarUsuarioWidget> {
                       padding: EdgeInsets.only(right: 11, left: 3),
                       child: Icon(
                         Icons.place,
-                        color: Colors.green,
+                        color: Colors.blue,
                       )),
                   Expanded(
                     child: Container(
@@ -171,13 +171,13 @@ class _CadastrarUsuarioWidgetState extends State<CadastrarUsuarioWidget> {
                           ),
                           Icon(
                             Icons.arrow_downward,
-                            color: Colors.green,
+                            color: Colors.blue,
                           ),
                         ],
                       ),
                       decoration: BoxDecoration(
                           border: Border.all(
-                              color: Colors.green,
+                              color: Colors.blue,
                               style: BorderStyle.solid,
                               width: 1)),
                     ),
@@ -210,7 +210,7 @@ class _CadastrarUsuarioWidgetState extends State<CadastrarUsuarioWidget> {
                       padding: EdgeInsets.only(right: 11, left: 3),
                       child: Icon(
                         Icons.place,
-                        color: Colors.green,
+                        color: Colors.blue,
                       )),
                   Expanded(
                     child: Container(
@@ -226,13 +226,13 @@ class _CadastrarUsuarioWidgetState extends State<CadastrarUsuarioWidget> {
                           ),
                           Icon(
                             Icons.arrow_downward,
-                            color: Colors.green,
+                            color: Colors.blue,
                           ),
                         ],
                       ),
                       decoration: BoxDecoration(
                           border: Border.all(
-                              color: Colors.green,
+                              color: Colors.blue,
                               style: BorderStyle.solid,
                               width: 1)),
                     ),
@@ -265,7 +265,7 @@ class _CadastrarUsuarioWidgetState extends State<CadastrarUsuarioWidget> {
                       padding: EdgeInsets.only(right: 11, left: 3),
                       child: Icon(
                         Icons.place,
-                        color: Colors.green,
+                        color: Colors.blue,
                       )),
                   Expanded(
                     child: Container(
@@ -281,13 +281,13 @@ class _CadastrarUsuarioWidgetState extends State<CadastrarUsuarioWidget> {
                           ),
                           Icon(
                             Icons.arrow_downward,
-                            color: Colors.green,
+                            color: Colors.blue,
                           ),
                         ],
                       ),
                       decoration: BoxDecoration(
                           border: Border.all(
-                              color: Colors.green,
+                              color: Colors.blue,
                               style: BorderStyle.solid,
                               width: 1)),
                     ),
@@ -327,7 +327,7 @@ class _CadastrarUsuarioWidgetState extends State<CadastrarUsuarioWidget> {
           decoration: InputDecoration(
               icon: Icon(
                 Icons.account_circle,
-                color: Colors.green,
+                color: Colors.blue,
               ),
               border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(2.0)),
@@ -361,7 +361,7 @@ class _CadastrarUsuarioWidgetState extends State<CadastrarUsuarioWidget> {
           decoration: InputDecoration(
               icon: Icon(
                 Icons.email,
-                color: Colors.green,
+                color: Colors.blue,
               ),
               border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(2.0)),
@@ -396,7 +396,7 @@ class _CadastrarUsuarioWidgetState extends State<CadastrarUsuarioWidget> {
           decoration: InputDecoration(
               icon: Icon(
                 Icons.phone_android,
-                color: Colors.green,
+                color: Colors.blue,
               ),
               border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(2.0)),
@@ -435,7 +435,7 @@ class _CadastrarUsuarioWidgetState extends State<CadastrarUsuarioWidget> {
           decoration: InputDecoration(
               icon: Icon(
                 Icons.date_range,
-                color: Colors.green,
+                color: Colors.blue,
               ),
               border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(2.0)),
@@ -470,7 +470,7 @@ class _CadastrarUsuarioWidgetState extends State<CadastrarUsuarioWidget> {
           decoration: InputDecoration(
               icon: Icon(
                 Icons.lock_outline,
-                color: Colors.green,
+                color: Colors.blue,
               ),
               border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(2.0)),
@@ -509,7 +509,7 @@ class _CadastrarUsuarioWidgetState extends State<CadastrarUsuarioWidget> {
           decoration: InputDecoration(
               icon: Icon(
                 Icons.lock_outline,
-                color: Colors.green,
+                color: Colors.blue,
               ),
               border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(2.0)),

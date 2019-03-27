@@ -22,11 +22,17 @@ class FriendDetailHeader extends StatelessWidget {
   }
 
   Widget _buildAvatar() {
-    return new CircleAvatar(
-      backgroundImage: CachedNetworkImageProvider(
-          'https://www.rd.com/wp-content/uploads/2017/09/01-shutterstock_476340928-Irina-Bg-1024x683.jpg'),
-      radius: 50.0,
-    );
+    return CachedNetworkImage(
+        fit: BoxFit.fill,
+        width: 150,
+        height: 150,
+        placeholder: Image.asset(
+          'assets/logo_sem_texto_teste.png',
+          width: 150,
+          height: 150,
+        ),
+        imageUrl:
+            'https://firebasestorage.googleapis.com/v0/b/aproximamais-b84ee.appspot.com/o/usuarios%2F${friend.id}.jpeg?alt=media&token=5cae4fd3-d3d4-44e4-893a-2349f6fda687');
   }
 
   Widget _buildFollowerInfo(TextTheme textTheme) {
@@ -68,17 +74,6 @@ class FriendDetailHeader extends StatelessWidget {
       child: new Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
-          new DecoratedBox(
-            decoration: new BoxDecoration(
-              border: new Border.all(color: Colors.white30),
-              borderRadius: new BorderRadius.circular(30.0),
-            ),
-            child: _createPillButton(
-              'Fale comigo',
-              context,
-              textColor: Colors.white70,
-            ),
-          ),
         ],
       ),
     );

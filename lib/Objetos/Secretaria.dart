@@ -15,4 +15,9 @@ class Secretaria {
       _$SecretariaFromJson(json);
 
   Secretaria(this.id, this.nome, this.cidade_id, this.permissao, this.cidade);
+
+  @override
+  String toString() {
+    return 'Secretaria{id: $id, nome: $nome, cidade_id: $cidade_id, permissao: $permissao, cidade: $cidade}';
+  }
 }

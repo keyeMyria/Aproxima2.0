@@ -65,10 +65,11 @@ class User {
       this.deletedAt,
       this.firebasekey,
       this.cidade,
-      this.secretariaId);
+      this.secretariaId,
+      this.foto);
 
   @override
   String toString() {
-    return 'User{id: $id, nome: $nome, email: $email, senhaSite: $senhaSite, senhaApp: $senhaApp, telefone: $telefone, endereco: $endereco, dataNascimento: $dataNascimento, idCidade: $idCidade, permissao: $permissao, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt, firebasekey: $firebasekey, cidade: $cidade, SecretariaId: $secretariaId}';
+    return 'User{id: $id, nome: $nome, email: $email, senhaSite: $senhaSite, senhaApp: $senhaApp, telefone: $telefone, endereco: $endereco, dataNascimento: $dataNascimento, idCidade: $idCidade, permissao: $permissao, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt, firebasekey: $firebasekey, cidade: $cidade, secretariaId: $secretariaId, foto: $foto}';
   }
 }

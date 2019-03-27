@@ -13,78 +13,35 @@ class TagsWidget extends StatefulWidget {
 }
 
 class _TagsWidgetState extends State<TagsWidget> {
-  Color c = Colors.green;
+  Color c = Colors.blue;
   @override
   Widget build(BuildContext context) {
     EdgeInsets ei = EdgeInsets.fromLTRB(10.0, 3.0, 15.0, 3.0);
     // TODO: implement build
     if (widget.tags != null) {
-      tc.setSelectedTags(widget.tags);
+      tc.addToSelectedTag(widget.tags[0].tag);
     }
-    return Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          StreamBuilder(
-            stream: tc.outTags,
-            builder: (context, AsyncSnapshot<List<Tag>> snap) {
-              if (snap.hasData) {
-                return PopupMenuButton(
-                    onSelected: (t) {
-                      print('TAGGG ${t.toString()}');
-                      tc.addToSelectedTag(t);
-                    },
-                    itemBuilder: (contex) {
-                      List<PopupMenuItem> itens = new List();
-                      for (Tag t in snap.data) {
-                        itens.add(PopupMenuItem(
-                          value: t,
-                          child: Text(t.tag_nome),
-                        ));
-                      }
-                      return itens;
-                    },
-                    child: Row(
-                      children: <Widget>[
-                        Icon(
-                          Icons.add,
-                          color: c,
-                          size: 35,
-                        ),
-                        Text(
-                          widget.EditarProtocolo
-                              ? 'Editar Assunto'
-                              : 'Adicionar Assunto',
-                          style: TextStyle(
-                              fontStyle: FontStyle.italic,
-                              fontSize: 17,
-                              color: c),
-                        )
-                      ],
-                    ));
-              } else {
-                return Container(
-                  width: 1,
-                  height: 1,
-                );
-              }
-            },
-          ),
-          Container(
-              child: SingleChildScrollView(
-            child: StreamBuilder(
-              builder: (context, AsyncSnapshot<List<Tag>> snap) {
-                if (snap.hasData) {
-                  return Wrap(
-                      children:
-                          List<Widget>.generate(snap.data.length, (int index) {
+    return StreamBuilder(
+      stream: tc.outTags,
+      builder: (context, AsyncSnapshot<List<Tag>> snap) {
+        if (snap.hasData) {
+          return Container(
+              height: MediaQuery.of(context).size.height * .7,
+              width: MediaQuery.of(context).size.width,
+              child: Wrap(
+                  alignment: WrapAlignment.center,
+                  runAlignment: WrapAlignment.center,
+                  verticalDirection: VerticalDirection.down,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children:
+                      List<Widget>.generate(snap.data.length, (int index) {
                     return Padding(
                         padding: EdgeInsets.only(top: 2, left: 7),
                         child: ChoiceChip(
-                          selected: true,
-                          selectedColor: Colors.white,
+                          selected: snap.data[index].isSelected,
+                          selectedColor: Colors.blue,
                           onSelected: (t) {
-                            tc.removeSelectedTag(snap.data[index]);
+                            tc.addToSelectedTag(snap.data[index]);
                           },
                           backgroundColor: Colors.white,
                           shape: RoundedRectangleBorder(
@@ -96,22 +53,21 @@ class _TagsWidgetState extends State<TagsWidget> {
                           label: Text(
                             '#${snap.data[index].tag_nome}',
                             style: TextStyle(
-                              color: c,
-                              fontStyle: FontStyle.italic,
-                            ),
+                                color: snap.data[index].isSelected
+                                    ? Colors.white
+                                    : c,
+                                fontStyle: FontStyle.italic,
+                                fontWeight: FontWeight.bold),
                           ),
                         ));
-                  }));
-                } else {
-                  return Container(
-                    width: 1,
-                    height: 1,
-                  );
-                }
-              },
-              stream: tc.outSelectedTags,
-            ),
-          )),
-        ]);
+                  })));
+        } else {
+          return Container(
+            width: 1,
+            height: 1,
+          );
+        }
+      },
+    );
   }
 }

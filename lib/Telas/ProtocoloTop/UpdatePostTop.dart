@@ -1,7 +1,6 @@
 import 'package:aproxima/Objetos/Protocolo.dart';
 import 'package:aproxima/Objetos/UpdateProtocolo.dart';
 import 'package:aproxima/Telas/ProtocoloTop/UpdatePostTopController.dart';
-import 'package:aproxima/Telas/UpdateProtocolo/UpdateProtocolo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 
@@ -96,13 +95,6 @@ class _UpdatePostTopState extends State<UpdatePostTop> {
                                         style: TextStyle(
                                             fontWeight: FontWeight.normal,
                                             fontSize: 15))),
-                                MaterialButton(
-                                  onPressed: () {
-                                    AddUpdateProtocolo()
-                                        .showDlgConfirmacao(widget.p, context);
-                                  },
-                                  child: Text('Dar Andamento'),
-                                )
                               ]));
                         }));
               } else {

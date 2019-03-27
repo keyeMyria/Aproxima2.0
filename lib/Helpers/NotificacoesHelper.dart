@@ -6,8 +6,10 @@ import 'dart:typed_data';
 import 'package:aproxima/Helpers/BadgerController.dart';
 import 'package:aproxima/Helpers/Helpers.dart';
 import 'package:aproxima/Objetos/News.dart';
+import 'package:aproxima/Objetos/Protocolo.dart';
 import 'package:aproxima/Objetos/User.dart';
 import 'package:aproxima/Widgets/News/NewsController.dart';
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -18,7 +20,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class NotificacoesHelper {
-  static var flutterLocalNotificationsPlugin;
+  static FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
   String iconPath = 'logo_branca';
   String largeIconPath = 'logo_preta';
 
@@ -332,7 +334,7 @@ class NotificacoesHelper {
   }
 
   Future onSelectNotification(String n) async {
-    print('Entrou AQUI');
+    //print('Entrou AQUI');
   }
 
   Future showOngoingNotification() async {
@@ -365,31 +367,42 @@ class NotificacoesHelper {
   int next(int min, int max) => min + _random.nextInt(max - min);
 
   Future showDailyAtTime() async {
-    var horarios = [
-      Time(next(11, 12), next(0, 30)),
-      Time(next(18, 19), next(0, 60))
-    ];
+    SharedPreferences.getInstance().then((sp) async {
+    if(!sp.getBool('${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}')) {
+      var horarios = [
+        Time(next(11, 12), next(0, 30)),
+        Time(next(18, 19), next(0, 60))
+      ];
 
-    var time = horarios[next(0, 1)];
-    var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
-      'repeatDailyAtTime channel id',
-      'repeatDailyAtTime channel name',
-      'repeatDailyAtTime description',
-      icon: iconPath,
-      largeIcon: largeIconPath,
-    );
-    var iOSPlatformChannelSpecifics = new IOSNotificationDetails();
-    var platformChannelSpecifics = new NotificationDetails(
-        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
-    News n = new News('0', '', DateTime.now(), 4, Helpers.aproximaUser, '');
-    await flutterLocalNotificationsPlugin.showDailyAtTime(
-        0,
-        'Reporte um problema',
-        'Encontrou algum problema hoje?',
-        time,
-        platformChannelSpecifics,
-        payload: '');
-    print('Saiu AQUI AQUI');
+      var time = horarios[next(0, 1)];
+      var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
+        'repeatDailyAtTime channel id',
+        'repeatDailyAtTime channel name',
+        'repeatDailyAtTime description',
+        icon: iconPath,
+        largeIcon: largeIconPath,
+      );
+      var iOSPlatformChannelSpecifics = new IOSNotificationDetails();
+      var platformChannelSpecifics = new NotificationDetails(
+          androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+      News n = new News('0', '', DateTime.now(), 4, Helpers.aproximaUser, '');
+      await flutterLocalNotificationsPlugin.showDailyAtTime(
+          0,
+          'Reporte um problema',
+          'Encontrou algum problema hoje?',
+          time,
+          platformChannelSpecifics,
+          payload: '');
+      print('Saiu AQUI AQUI');
+      sp.setBool('${DateTime
+          .now()
+          .day}/${DateTime
+          .now()
+          .month}/${DateTime
+          .now()
+          .year}', true);
+    }
+    });
   }
 
   Future showWeeklyAtDayAndTime() async {
@@ -496,5 +509,48 @@ class NotificacoesHelper {
             ],
           ),
     );
+  }
+
+  Future getDL(Protocolo post, bool short) async {
+    final DynamicLinkParameters parameters = new DynamicLinkParameters(
+      domain: 'aproxima.page.link',
+      link:
+          Uri.parse('http://www.aproximamais.net/relato/' + post.id.toString()),
+      androidParameters: new AndroidParameters(
+        packageName: 'com.brunoeleodoro.org.aproxima',
+        minimumVersion: 0,
+      ),
+      iosParameters: new IosParameters(
+        bundleId: 'com.brunoeleodoro.org.aproxima',
+        minimumVersion: '1.0.1',
+        appStoreId: '123456789',
+      ),
+      navigationInfoParameters:
+          new NavigationInfoParameters(forcedRedirectEnabled: true),
+      dynamicLinkParametersOptions: new DynamicLinkParametersOptions(
+        shortDynamicLinkPathLength: ShortDynamicLinkPathLength.short,
+      ),
+    );
+
+    Uri url;
+    if (short) {
+      try {
+        final ShortDynamicLink shortLink = await parameters.buildShortLink();
+        url = shortLink.shortUrl;
+        print(url);
+      } catch (e) {
+        print('Erro:' + e.toString());
+        url = await parameters.buildUrl();
+      }
+    } else {
+      url = await parameters.buildUrl();
+    }
+    print(url);
+
+    var _linkMessage = url.toString();
+    post.dlink = _linkMessage;
+    //print('Entrou aqui' + d.toString());
+    print('CHEGOU AQUI');
+    return _linkMessage;
   }
 }

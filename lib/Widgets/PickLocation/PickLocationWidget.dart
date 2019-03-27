@@ -48,7 +48,7 @@ class _PickLocationWidgetState extends State<PickLocationWidget> {
                   children: <Widget>[
                     Icon(
                       Icons.add,
-                      color: Colors.green,
+                      color: Colors.blue,
                       size: 35,
                     ),
                     Text(
@@ -56,7 +56,7 @@ class _PickLocationWidgetState extends State<PickLocationWidget> {
                       style: TextStyle(
                           fontStyle: FontStyle.italic,
                           fontSize: 17,
-                          color: Colors.green),
+                          color: Colors.blue),
                     )
                   ],
                 )),
@@ -107,7 +107,7 @@ class _PickLocationWidgetState extends State<PickLocationWidget> {
                                                   builder: (context) {
                                                     return Icon(
                                                       Icons.place,
-                                                      color: Colors.green,
+                                                      color: Colors.blue,
                                                       size: 35,
                                                     );
                                                   })

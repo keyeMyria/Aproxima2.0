@@ -17,7 +17,7 @@ class BadgerController extends BlocBase {
       if (badges == null) {
         badges = 0;
       }
-      // FlutterAppBadger.updateBadgeCount(badges);
+      //AppBadger.updateBadgeCount(badges);
       inBadge.add(badges);
     });
   }
@@ -54,7 +54,7 @@ class BadgerController extends BlocBase {
       badges = 0;
     }
     badges++;
-    //FlutterAppBadger.updateBadgeCount(badges);
+    //AppBadger.updateBadgeCount(badges);
     prefs.setInt('badges', badges);
     inBadge.add(badges);
     print('ADICIONOU BADGE ${badges}');
@@ -69,7 +69,7 @@ class BadgerController extends BlocBase {
       badges = 0;
     }
     badges = 0;
-    //FlutterAppBadger.updateBadgeCount(badges);
+    //AppBadger.updateBadgeCount(badges);
     prefs.setInt('badges', badges);
     inBadge.add(badges);
     print('ADICIONOU BADGE ${badges}');

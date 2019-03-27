@@ -9,16 +9,17 @@ import 'package:aproxima/Widgets/FeedUtils/Bolinhas.dart';
 import 'package:aproxima/Widgets/FeedUtils/FotoPage.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:latlong/latlong.dart';
+import 'package:share/share.dart';
 
 class ActivityFeedItem extends StatelessWidget {
   Protocolo protocolo;
   String type;
   bool hideComment;
   ActivityFeedItem({this.protocolo, this.type, this.hideComment = false});
-
-  //TODO Arrumar esse Constructor
 
   Widget profileColumn(BuildContext context, Protocolo post) => Row(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -56,122 +57,23 @@ class ActivityFeedItem extends StatelessWidget {
   Widget actionColumn(Protocolo post, BuildContext context) {
     ApoioProtocoloController apc = new ApoioProtocoloController(post);
     bool userLiked = false;
+
     return Padding(
         padding: EdgeInsets.all(10.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Row(
+        child: GestureDetector(
+            onTap: () {
+              if (!hideComment) {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ComentarioPage(post)));
+              }
+            },
+            child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                StreamBuilder(
-                  stream: apc.outApoio,
-                  builder: (context, AsyncSnapshot<List<Apoio>> snap) {
-                    Apoio apoio = null;
-                    bool userLiked = false;
-                    if (snap.hasData) {
-                      for (Apoio a in snap.data) {
-                        if (a.id == Helpers.user.id) {
-                          userLiked = true;
-                          apoio = a;
-                        }
-                      }
-                    }
-                    return IconButton(
-                      icon: Stack(
-                        alignment: Alignment.center,
-                        children: <Widget>[
-                          Icon(
-                            userLiked ? Icons.favorite : Icons.favorite_border,
-                            size: 35,
-                          ),
-                          Center(
-                              child: Text(
-                            snap.hasData ? snap.data.length.toString() : '',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                color: userLiked
-                                    ? Colors.white
-                                    : Colors.green[500],
-                                fontSize: 14),
-                          ))
-                        ],
-                      ),
-                      color: Colors.green[500],
-                      onPressed: () {
-                        !userLiked
-                            ? apc.ApoiarProtocolo(post)
-                            : apc.DesapoiarProtocolo(post, apoio);
-                      },
-                    );
-                  },
-                ),
-                hideComment
-                    ? new Container()
-                    : IconButton(
-                        icon: Icon(Icons.chat_bubble_outline),
-                        color: Colors.green[500],
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => ComentarioPage(post)));
-                        },
-                      ),
-              ],
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: 10, bottom: 10),
-              child: Text(
-                post.titulo,
-                style: TextStyle(
-                    fontWeight: FontWeight.w800,
-                    fontSize: 20,
-                    fontStyle: FontStyle.italic),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: 10, bottom: 10),
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: getTagss(post.tags),
-                ),
-              ),
-            ),
-            Padding(
-                padding: EdgeInsets.only(left: 10, bottom: 4),
-                child: Text(post.descricao,
-                    maxLines: 999,
-                    style: TextStyle(
-                        fontWeight: FontWeight.normal, fontSize: 17))),
-          ],
-        ));
-  }
-
-  //post cards
-  Widget postCard(BuildContext context, Protocolo post) {
-    ApoioProtocoloController apc = new ApoioProtocoloController(post);
-    bool userLiked = false;
-    if (post.fotos == null) {
-      return Card(
-        elevation: 2.0,
-        child: Column(
-          children: <Widget>[
-            TopArea(post, context),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(), //profileColumn(context, post),
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.only(bottom: 2),
-                ),
-                new Row(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     StreamBuilder(
@@ -188,28 +90,39 @@ class ActivityFeedItem extends StatelessWidget {
                           }
                         }
                         return IconButton(
-                          icon: Stack(
-                            alignment: Alignment.center,
-                            children: <Widget>[
-                              Icon(
-                                userLiked
-                                    ? Icons.favorite
-                                    : Icons.favorite_border,
-                                size: 35,
-                              ),
-                              Center(
-                                  child: Text(
-                                snap.hasData ? snap.data.length.toString() : '',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    color: userLiked
-                                        ? Colors.white
-                                        : Colors.green[500],
-                                    fontSize: 14),
-                              ))
-                            ],
+                          icon: Container(
+                            height: 60,
+                            width: 60,
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Icon(
+                                  userLiked ? Icons.thumb_up : Icons.thumb_up,
+                                  size: 25,
+                                  color: userLiked
+                                      ? Colors.blue[500]
+                                      : Colors.grey,
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 2),
+                                ),
+                                Text(
+                                  snap.hasData
+                                      ? snap.data.length.toString()
+                                      : '',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: userLiked
+                                          ? Colors.blue[500]
+                                          : Colors.grey,
+                                      fontSize: 14),
+                                )
+                              ],
+                            ),
                           ),
-                          color: Colors.green[500],
+                          iconSize: 40,
+                          color: Colors.blue[500],
                           onPressed: () {
                             !userLiked
                                 ? apc.ApoiarProtocolo(post)
@@ -222,7 +135,7 @@ class ActivityFeedItem extends StatelessWidget {
                         ? new Container()
                         : IconButton(
                             icon: Icon(Icons.chat_bubble_outline),
-                            color: Colors.green[500],
+                            color: Colors.blue[500],
                             onPressed: () {
                               Navigator.push(
                                   context,
@@ -231,12 +144,21 @@ class ActivityFeedItem extends StatelessWidget {
                                           ComentarioPage(post)));
                             },
                           ),
+                    IconButton(
+                      icon: Icon(Icons.share),
+                      color: Colors.blue[500],
+                      onPressed: () {
+                        Helpers.nh.getDL(post, true).then((link) {
+                          Share.share('${link}');
+                        }).catchError((err) {
+                          print('error:${err.toString()}');
+                        });
+                      },
+                    ),
                   ],
                 ),
                 Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 5,
-                  ),
+                  padding: EdgeInsets.only(left: 10, bottom: 10),
                   child: Text(
                     post.titulo,
                     style: TextStyle(
@@ -245,150 +167,196 @@ class ActivityFeedItem extends StatelessWidget {
                         fontStyle: FontStyle.italic),
                   ),
                 ),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(vertical: 20.0),
+                Padding(
+                  padding: EdgeInsets.only(left: 10, bottom: 10),
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
                     child: Row(
                       children: getTagss(post.tags),
                     ),
                   ),
                 ),
+                Padding(
+                    padding: EdgeInsets.only(left: 10, bottom: 4),
+                    child: Text(post.descricao,
+                        maxLines: 999,
+                        style: TextStyle(
+                            fontWeight: FontWeight.normal, fontSize: 17))),
               ],
-            ),
-          ],
+            )));
+  }
+
+  //post cards
+  Widget postCard(BuildContext context, Protocolo post) {
+    ApoioProtocoloController apc = new ApoioProtocoloController(post);
+    bool userLiked = false;
+    BolinhasController bc =
+        new BolinhasController(post.fotos != null ? post.fotos.length : 0, 0);
+    var map = new FlutterMap(
+      options: new MapOptions(
+        interactive: true,
+        center: LatLng(post.lat, post.lng),
+        zoom: 14,
+      ),
+      mapController: MapController(),
+      layers: [
+        new TileLayerOptions(
+          urlTemplate: "https://api.tiles.mapbox.com/v4/"
+              "{id}/{z}/{x}/{y}@2x.png?access_token=sk.eyJ1IjoicmJzb2Z0d2FyZSIsImEiOiJjam5xYng1aG8wMG55M3hreXJlZmVxMjA1In0.NBY7xfp9rERgMM3Ub1iwFg",
+          additionalOptions: {
+            'accessToken':
+            'sk.eyJ1IjoicmJzb2Z0d2FyZSIsImEiOiJjam5xYng1aG8wMG55M3hreXJlZmVxMjA1In0.NBY7xfp9rERgMM3Ub1iwFg',
+            'id': 'mapbox.streets',
+          },
         ),
-      );
-    } else {
-      BolinhasController bc = new BolinhasController(post.fotos.length, 0);
-      return Card(
-        elevation: 2.0,
-        child: Column(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(), //profileColumn(context, post),
-            ),
-            TopArea(post, context),
-            SizedBox(
-                height: MediaQuery.of(context).size.height * .4,
-                width: MediaQuery.of(context).size.width,
-                child: Stack(children: <Widget>[
-                  Swiper(
-                      onIndexChanged: (newindex) {
-                        bc.inSelecionado.add(newindex);
-                      },
-                      itemCount: post.fotos.length,
-                      itemWidth: MediaQuery.of(context).size.width,
-                      layout: SwiperLayout.DEFAULT,
-                      itemHeight: MediaQuery.of(context).size.height * .4,
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (BuildContext c, int i) {
-                        return post.fotos[i].link != null
-                            ? Stack(
-                                alignment: Alignment.center,
-                                children: <Widget>[
-                                  hideComment
-                                      ? GestureDetector(
-                                          onTap: () {
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      FotoPage(
-                                                          fotos: post.fotos,
-                                                          index: i),
-                                                ));
-                                          },
-                                          child: SizedBox(
-                                            height: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                .4,
-                                            width: MediaQuery.of(context)
-                                                .size
-                                                .width,
-                                            child: CachedNetworkImage(
-                                              imageUrl: post.fotos[i].link,
-                                              placeholder: SpinKitThreeBounce(
-                                                color: Colors.green,
-                                                size: 50,
+        new MarkerLayerOptions(markers: [
+          Marker(
+              point: LatLng(post.lat, post.lng),
+              builder: (context) {
+                return Icon(
+                  Icons.place,
+                  color: Colors.blue,
+                  size: 35,
+                );
+              })
+        ]),
+      ],
+    );
+    return Card(
+      elevation: 2.0,
+      child: Column(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(), //profileColumn(context, post),
+          ),
+          TopArea(post, context),
+          SizedBox(
+              height: MediaQuery.of(context).size.height * .4,
+              width: MediaQuery.of(context).size.width,
+              child: Stack(children: <Widget>[
+                Swiper(
+                    onIndexChanged: (newindex) {
+                      bc.inSelecionado.add(newindex);
+                    },
+                    itemCount: post.fotos != null ? post.fotos.length + 1 : 1,
+                    itemWidth: MediaQuery.of(context).size.width,
+                    layout: SwiperLayout.DEFAULT,
+                    itemHeight: MediaQuery.of(context).size.height * .4,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (BuildContext c, int i) {
+                      if (post.fotos != null) {
+                        if (i != post.fotos.length) {
+                          return post.fotos[i].link != null
+                              ? Stack(
+                                  alignment: Alignment.center,
+                                  children: <Widget>[
+                                    hideComment
+                                        ? GestureDetector(
+                                            onTap: () {
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        FotoPage(
+                                                            fotos: post.fotos,
+                                                            index: i),
+                                                  ));
+                                            },
+                                            child: SizedBox(
+                                              height: MediaQuery.of(context)
+                                                      .size
+                                                      .height *
+                                                  .4,
+                                              width: MediaQuery.of(context)
+                                                  .size
+                                                  .width,
+                                              child: CachedNetworkImage(
+                                                imageUrl: post.fotos[i].link,
+                                                placeholder: SpinKitThreeBounce(
+                                                  color: Colors.blue,
+                                                  size: 50,
+                                                ),
+                                                fit: BoxFit.fill,
                                               ),
-                                              fit: BoxFit.fill,
-                                            ),
-                                          ))
-                                      : GestureDetector(
-                                          onTap: () {
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      FotoPage(
-                                                          fotos: post.fotos,
-                                                          index: i),
-                                                ));
-                                          },
-                                          child: SizedBox(
-                                            height: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                .4,
-                                            width: MediaQuery.of(context)
-                                                .size
-                                                .width,
-                                            child: CachedNetworkImage(
-                                              imageUrl: post.fotos[i].link,
-                                              placeholder: SpinKitThreeBounce(
-                                                color: Colors.green,
-                                                size: 50,
+                                            ))
+                                        : GestureDetector(
+                                            onTap: () {
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        FotoPage(
+                                                            fotos: post.fotos,
+                                                            index: i),
+                                                  ));
+                                            },
+                                            child: SizedBox(
+                                              height: MediaQuery.of(context)
+                                                      .size
+                                                      .height *
+                                                  .4,
+                                              width: MediaQuery.of(context)
+                                                  .size
+                                                  .width,
+                                              child: CachedNetworkImage(
+                                                imageUrl: post.fotos[i].link,
+                                                placeholder: SpinKitThreeBounce(
+                                                  color: Colors.blue,
+                                                  size: 50,
+                                                ),
+                                                fit: BoxFit.fill,
                                               ),
-                                              fit: BoxFit.fill,
-                                            ),
-                                          )),
-                                ],
-                              )
-                            : Image.asset(
-                                'assets/logo.png',
-                                fit: BoxFit.fill,
-                              );
-                      }),
-                  Positioned(
-                      width: MediaQuery.of(context).size.width * .9,
-                      bottom: 15.0,
-                      child: Center(
-                        child: StreamBuilder(
-                          builder: ((context, total) {
-                            return StreamBuilder(
-                                stream: bc.outSelecionado,
-                                builder: ((context, selecionado) {
-                                  if (selecionado.hasData) {
-                                    return Center(
-                                        child: Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceAround,
-                                            children: dotList(
-                                                total.data, selecionado.data)));
-                                  } else {
-                                    return Container();
-                                  }
-                                }));
-                          }),
-                          stream: bc.outTotal, //,
-                        ),
-                      )),
-                ])),
-            actionColumn(post, context),
-          ],
-        ),
-      );
-    }
+                                            )),
+                                  ],
+                                )
+                              : Image.asset(
+                                  'assets/logo.png',
+                                  fit: BoxFit.fill,
+                                );
+                        } else {
+                          return map;
+                        }
+                      } else {
+                        return map;
+                      }
+                    }),
+                Positioned(
+                    width: MediaQuery.of(context).size.width * .9,
+                    bottom: 15.0,
+                    child: Center(
+                      child: StreamBuilder(
+                        builder: ((context, total) {
+                          return StreamBuilder(
+                              stream: bc.outSelecionado,
+                              builder: ((context, selecionado) {
+                                if (selecionado.hasData) {
+                                  return Center(
+                                      child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceAround,
+                                          children: dotList(total.data + 1,
+                                              selecionado.data)));
+                                } else {
+                                  return Container();
+                                }
+                              }));
+                        }),
+                        stream: bc.outTotal, //,
+                      ),
+                    )),
+              ])),
+          actionColumn(post, context),
+        ],
+      ),
+    );
   }
 
   Widget getStatus(String status, BuildContext context) {
     Color c;
-    print('Status: ${status}');
+    //print('Status: ${status}');
     switch (status) {
       case 'Em Andamento':
         c = Colors.lightBlueAccent;
@@ -413,7 +381,7 @@ class ActivityFeedItem extends StatelessWidget {
     return Expanded(
         child: GestureDetector(
             onTap: () {
-              print('Click Snackbar');
+              // print('Click Snackbar');
               SnackBar s = SnackBar(
                 content: Text(
                   'Status: ${status}',
@@ -463,10 +431,10 @@ class ActivityFeedItem extends StatelessWidget {
         height: 15.0,
         width: 15.0,
         decoration: BoxDecoration(
-          color: i == selecionado ? Colors.green : Colors.transparent,
+          color: i == selecionado ? Colors.blue : Colors.transparent,
           borderRadius: BorderRadius.all(Radius.circular(10.0)),
           border: Border.all(
-              color: Colors.green, width: 1.0, style: BorderStyle.solid),
+              color: Colors.blue, width: 1.0, style: BorderStyle.solid),
         ),
       ));
     }
@@ -475,19 +443,26 @@ class ActivityFeedItem extends StatelessWidget {
 
   getTagss(List<Tagss> tags) {
     List<Widget> l = new List();
-    for (int i = 0; i < tags.length; i++) {
-      l.add(Container(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 3),
-          child: Text(
-            '#' + tags[i].tag.tag_nome,
-            style: TextStyle(
-                fontStyle: FontStyle.italic, color: Colors.green[900]),
+    if (tags != null) {
+      print('AQUI TAGS ${tags}');
+
+      for (int i = 0; i < tags.length; i++) {
+        l.add(Container(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 3),
+            child: Text(
+              '#' + tags[i].tag.tag_nome,
+              style: TextStyle(
+                  fontStyle: FontStyle.italic, color: Colors.blue[900]),
+            ),
           ),
-        ),
-      ));
+        ));
+      }
+      return l;
+    } else {
+      l.add(Container());
+      return l;
     }
-    return l;
   }
 
   Widget TopArea(Protocolo post, BuildContext context) {
@@ -496,21 +471,28 @@ class ActivityFeedItem extends StatelessWidget {
       child: Row(
         children: <Widget>[
           GestureDetector(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => FriendDetailsPage(
-                            post.usuario, false, 0,
-                            avatarTag:
-                                post.usuario.id.toString() + post.id.toString(),
-                            isuser: false)));
-              },
-              child: CircleAvatar(
-                radius: 25.0,
-                backgroundImage: NetworkImage(
-                    'https://www.rd.com/wp-content/uploads/2017/09/01-shutterstock_476340928-Irina-Bg-1024x683.jpg'),
-              )),
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => FriendDetailsPage(
+                          post.usuario, false, 0,
+                          avatarTag:
+                              post.usuario.id.toString() + post.id.toString(),
+                          isuser: false)));
+            },
+            child: CachedNetworkImage(
+                fit: BoxFit.fill,
+                width: 50,
+                height: 50,
+                placeholder: Image.asset(
+                  'assets/logo_sem_texto_teste.png',
+                  width: 50,
+                  height: 50,
+                ),
+                imageUrl:
+                    'https://firebasestorage.googleapis.com/v0/b/aproximamais-b84ee.appspot.com/o/usuarios%2F${post.usuario.id}.jpeg?alt=media&token=5cae4fd3-d3d4-44e4-893a-2349f6fda687'),
+          ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[

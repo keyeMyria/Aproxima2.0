@@ -59,7 +59,7 @@ class _NewsWidgeteState extends State<NewsWidget> {
           child: CircleAvatar(
             radius: 20.0,
             backgroundImage: NetworkImage(
-                'https://www.rd.com/wp-content/uploads/2017/09/01-shutterstock_476340928-Irina-Bg-1024x683.jpg'),
+                'https://firebasestorage.googleapis.com/v0/b/aproximamais-b84ee.appspot.com/o/usuarios%2F${n.Responsavel.id}.jpeg?alt=media&token=5cae4fd3-d3d4-44e4-893a-2349f6fda687'),
           ),
         ),
       ),

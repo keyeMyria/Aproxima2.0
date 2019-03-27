@@ -16,11 +16,11 @@ class _NewsPageState extends State<NewsPage> {
       child: Scaffold(
         body: Container(child: NewsWidget()),
         appBar: new AppBar(
+          leading: Container(),
           title: new Text(
             "Notificacões",
             style: new TextStyle(color: Colors.white),
           ),
-          backgroundColor: Colors.green,
         ),
       ),
       bloc: nc,

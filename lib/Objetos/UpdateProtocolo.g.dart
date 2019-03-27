@@ -11,10 +11,6 @@ DateTime Formatar(String s) {
     var d = s.split('-');
     var c = d[2].split(' ');
     var j = c[1].split(':');
-    print(
-        '${int.parse(d[0])} ${int.parse(d[1])} ${int.parse(c[0])} ${int.parse(j[0])} ${int.parse(j[1])}');
-    print(
-        'AQUI FDP  D ${d.toString()}   + C  ${c.toString()}   + J ${j.toString()}');
     DateTime date = new DateTime(int.parse(d[0]), int.parse(d[1]),
         int.parse(c[0]), int.parse(j[0]), int.parse(j[1]));
     return date;
@@ -25,7 +21,6 @@ DateTime Formatar(String s) {
 }
 
 UpdateProtocolo _$UpdateProtocoloFromJson(Map<String, dynamic> json) {
-  print('AQUI LOLOLOL ${json['created_at']}');
   return UpdateProtocolo(
       int.parse(json['id']),
       int.parse(json['user_id']),

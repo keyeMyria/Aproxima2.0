@@ -7,18 +7,22 @@ import 'package:aproxima/Objetos/Estado.dart';
 import 'package:aproxima/Objetos/Pais.dart';
 import 'package:aproxima/Objetos/User.dart';
 import 'package:camera/camera.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timeago/timeago.dart' as timeago;
+
+final FirebaseAuth auth = FirebaseAuth.instance;
 
 class Helpers {
   static bool isVisivel;
   static bool acaoVoto;
   static User user;
+  static FirebaseApp app;
   static String appBadgeSupported;
   SharedPreferences prefs;
   static NotificacoesHelper nh = new NotificacoesHelper();
@@ -44,7 +48,7 @@ class Helpers {
       '');
 
   static BuildContext zoomContext;
- // static CacheManager cacheManager;
+  // static CacheManager cacheManager;
 
   Cidade tibagi = new Cidade('Tibagi', 1, 0, -24.6883256, -50.6186093,
       new Estado('Paraná', 0, 'PR', 0, new Pais(0, 'Brasil', 'BR')));
@@ -54,7 +58,7 @@ class Helpers {
       case 0:
         return Colors.red;
       case 1:
-        return Colors.green;
+        return Colors.blue;
       case 2:
         return Colors.blue;
       case 3:
@@ -103,7 +107,6 @@ class Helpers {
       }
     }
   }*/
-
 
   Map<String, dynamic> getmapListDynamic(Map<dynamic, dynamic> d) {
     Map<String, dynamic> s = new Map();

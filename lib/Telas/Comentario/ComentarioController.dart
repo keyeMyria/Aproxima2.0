@@ -10,6 +10,10 @@ class ComentarioController implements BlocBase {
   List<Comentario> comentarios;
   DatabaseReference _comentarioRef;
   Protocolo p;
+  BehaviorSubject<Protocolo> _controllerProtocolo =
+      new BehaviorSubject<Protocolo>();
+  Stream<Protocolo> get outProtocolo => _controllerProtocolo.stream;
+  Sink<Protocolo> get inProtocolo => _controllerProtocolo.sink;
   ComentarioController(Protocolo p) {
     if (comentarios == null) {
       comentarios = new List();
@@ -28,6 +32,7 @@ class ComentarioController implements BlocBase {
         }
       }
     });
+    _controllerProtocolo.add(p);
   }
 
   Stream<List<Comentario>> get outComentarioPage =>
@@ -38,6 +43,7 @@ class ComentarioController implements BlocBase {
   @override
   void dispose() {
     _controllerComentarioPage.close();
+    _controllerProtocolo.close();
   }
 
   void addComment(Comentario c) {

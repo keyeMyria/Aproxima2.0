@@ -51,7 +51,7 @@ class NewsController implements BlocBase {
     print(n.toString());
     switch (n.tipo) {
       case 0:
-        print('Entrou aqui case 0');
+        //print('Entrou aqui case 0');
         print(
             ' http://www.aproximamais.net/webservice/json.php?buscaprotocoloid=' +
                 n.sujeito);

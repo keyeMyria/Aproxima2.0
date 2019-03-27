@@ -23,7 +23,7 @@ class _AdicionarTextoState extends State<AdicionarTexto> {
                 hintText: 'Burraco na via',
                 labelText: 'Titulo',
                 helperText: 'Defina o titulo',
-                helperStyle: TextStyle(color: Colors.green, fontSize: 16),
+                helperStyle: TextStyle(color: Colors.blue, fontSize: 16),
                 hintStyle: TextStyle(
                     fontSize: 14.0,
                     color: Colors.grey,

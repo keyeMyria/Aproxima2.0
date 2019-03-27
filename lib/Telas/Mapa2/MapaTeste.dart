@@ -77,8 +77,7 @@ class _MapPageState extends State<MapPage> {
                   BitmapDescriptor.hueRed);
               break;
           }
-
-          mapController
+          /*mapController
               .addMarker(new MarkerOptions(
                   icon: c,
                   draggable: false,
@@ -89,11 +88,11 @@ class _MapPageState extends State<MapPage> {
               .then((mm) {
             p.m = mm;
             ps.add(p);
-          });
+          });*/
         }
       }
       mc.inMapa.add(ps);
-      mapController.onMarkerTapped.add(_onMarkerTapped);
+      //mapController.onMarkerTapped.add(_onMarkerTapped);
     } else {
       mc.Fetch();
     }
@@ -106,10 +105,10 @@ class _MapPageState extends State<MapPage> {
         height: 15.0,
         width: 15.0,
         decoration: BoxDecoration(
-          color: i == selecionado ? Colors.green : Colors.transparent,
+          color: i == selecionado ? Colors.blue : Colors.transparent,
           borderRadius: BorderRadius.all(Radius.circular(10.0)),
           border: Border.all(
-              color: Colors.green, width: 1.0, style: BorderStyle.solid),
+              color: Colors.blue, width: 1.0, style: BorderStyle.solid),
         ),
       ));
     }
@@ -119,9 +118,9 @@ class _MapPageState extends State<MapPage> {
   void _onMarkerTapped(Marker marker) {
     mc.outMapa.first.then((protocolos) {
       for (Protocolo p in protocolos) {
-        print('FDP ${p.m.id}  ${marker.id}');
-        if (p.m.id == marker.id) {
-          print('ACHOU DE VERDADE FDP ${p.m.id}  ${marker.id}');
+        print('FDP ${p.m.markerId}  ${marker.markerId}');
+        if (p.m.markerId == marker.markerId) {
+          print('ACHOU DE VERDADE FDP ${p.m.markerId}  ${marker.markerId}');
           _showDialog(p);
         }
       }
@@ -135,8 +134,8 @@ class _MapPageState extends State<MapPage> {
     mc = new MapaController();
     return Scaffold(
         appBar: AppBar(
-          title: Text('Maps Sample App'),
-          backgroundColor: Colors.green[700],
+          leading: Container(),
+          title: Text('Mapa da Cidade'),
         ),
         body: StreamBuilder(
             stream: mc.outMapa,
@@ -158,7 +157,6 @@ class _MapPageState extends State<MapPage> {
                       scrollGesturesEnabled: true,
                       tiltGesturesEnabled: true,
                       zoomGesturesEnabled: true,
-                      trackCameraPosition: true,
                     ),
                     Padding(
                       padding: const EdgeInsets.all(16.0),
@@ -167,8 +165,12 @@ class _MapPageState extends State<MapPage> {
                         child: FloatingActionButton(
                           onPressed: () => print('button pressed'),
                           materialTapTargetSize: MaterialTapTargetSize.padded,
-                          backgroundColor: Colors.green,
-                          child: const Icon(Icons.map, size: 36.0),
+                          backgroundColor: Colors.blue,
+                          child: const Icon(
+                            Icons.map,
+                            size: 36.0,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ),
@@ -177,7 +179,7 @@ class _MapPageState extends State<MapPage> {
               } else {
                 return Container(
                   child: SpinKitThreeBounce(
-                    color: Colors.green,
+                    color: Colors.blue,
                     size: 50,
                   ),
                 );
@@ -197,12 +199,12 @@ class _MapPageState extends State<MapPage> {
               children: <Widget>[
                 IconButton(
                   icon: Icon(Icons.favorite_border),
-                  color: Colors.green[500],
+                  color: Colors.blue[500],
                   onPressed: () {},
                 ),
                 IconButton(
                   icon: Icon(Icons.chat_bubble_outline),
-                  color: Colors.green[500],
+                  color: Colors.blue[500],
                   onPressed: () {
                     Navigator.push(
                         context,
@@ -362,8 +364,8 @@ class _MapPageState extends State<MapPage> {
           padding: EdgeInsets.symmetric(horizontal: 3),
           child: Text(
             '#' + tags[i].tag.tag_nome,
-            style: TextStyle(
-                fontStyle: FontStyle.italic, color: Colors.green[900]),
+            style:
+                TextStyle(fontStyle: FontStyle.italic, color: Colors.blue[900]),
           ),
         ),
       ));
@@ -407,12 +409,12 @@ class _MapPageState extends State<MapPage> {
                             children: <Widget>[
                               IconButton(
                                 icon: Icon(Icons.favorite_border),
-                                color: Colors.green[500],
+                                color: Colors.blue[500],
                                 onPressed: () {},
                               ),
                               IconButton(
                                 icon: Icon(Icons.chat_bubble_outline),
-                                color: Colors.green[500],
+                                color: Colors.blue[500],
                                 onPressed: () {
                                   Navigator.push(
                                       context,
@@ -509,7 +511,7 @@ class _MapPageState extends State<MapPage> {
                                                     imageUrl: p.fotos[i].link,
                                                     placeholder:
                                                         SpinKitThreeBounce(
-                                                      color: Colors.green,
+                                                      color: Colors.blue,
                                                       size: 50,
                                                     ),
                                                     fit: BoxFit.fill,

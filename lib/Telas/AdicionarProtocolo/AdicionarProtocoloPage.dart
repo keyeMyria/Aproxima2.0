@@ -21,7 +21,7 @@ class _AdicionarProtocoloPageState extends State<AdicionarProtocoloPage> {
                 ? AdicionarProtocoloWidget(p: snap.data)
                 : Center(
                     child: SpinKitThreeBounce(
-                      color: Colors.green,
+                      color: Colors.blue,
                       size: 50,
                     ),
                   );

@@ -37,14 +37,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
-      color: Colors.lightGreenAccent,
+      color: Colors.blueAccent,
       theme: new ThemeData(
-          primarySwatch: Colors.green,
-          splashColor: Colors.lightGreen,
-          backgroundColor: Colors.green,
-          accentColor: Colors.lightGreenAccent,
+          primarySwatch: Colors.blue,
+          splashColor: Colors.blue,
+          backgroundColor: Colors.blueAccent,
+          accentColor: Colors.blueAccent,
           accentColorBrightness: Brightness.light,
-          primaryColor: Colors.green),
+          primaryColor: Colors.blueAccent),
       home: new LoginPage(),
       debugShowCheckedModeBanner: false,
     );

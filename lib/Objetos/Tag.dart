@@ -10,6 +10,7 @@ class Tag {
   DateTime updated_at;
   DateTime deleted_at;
   int idLocal;
+  bool isSelected;
   int getIdLocal() {
     return idLocal;
   }

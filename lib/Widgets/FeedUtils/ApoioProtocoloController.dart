@@ -70,17 +70,21 @@ class ApoioProtocoloController extends BlocBase {
     Apoios = new List();
 
     _protocoloRef.once().then((DataSnapshot dataSnapshot) {
-      for (int i = 0; i < dataSnapshot.value.values.toList().length; i++) {
-        Apoio a = new Apoio(
-            dataSnapshot.value.values.toList()[i]['apoiador'],
-            DateTime.fromMillisecondsSinceEpoch(
-                dataSnapshot.value.values.toList()[i]['data']));
-        a.chave = dataSnapshot.value.keys.toList()[i];
-        Apoios.add(a);
+      if (dataSnapshot.value != null) {
+        for (int i = 0; i < dataSnapshot.value.values.toList().length; i++) {
+          Apoio a = new Apoio(
+              dataSnapshot.value.values.toList()[i]['apoiador'],
+              DateTime.fromMillisecondsSinceEpoch(
+                  dataSnapshot.value.values.toList()[i]['data']));
+          a.chave = dataSnapshot.value.keys.toList()[i];
+          Apoios.add(a);
+        }
       }
       inApoio.add(Apoios);
     }).catchError((err) {
-      print('Error: ${err.toString()}');
+      print('Error APOIOS DEMONIO: ${err.toString()}');
+      Apoios = null;
+      inApoio.add(Apoios);
     });
     _protocoloRef.onChildAdded.listen((event) {
       Apoio a = new Apoio(event.snapshot.value['apoiador'],

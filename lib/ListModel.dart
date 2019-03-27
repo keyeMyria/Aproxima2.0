@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -40,7 +41,7 @@ class ListModel<E> {
 }
 
 /// Displays its integer item as 'item N' on a Card whose color is based on
-/// the item's value. The text is displayed in bright green if selected is true.
+/// the item's value. The text is displayed in bright blue if selected is true.
 /// This widget's height is based on the animation parameter, it varies
 /// from 0 to 128 as the animation varies from 0.0 to 1.0.
 class CardItem extends StatelessWidget {
@@ -79,12 +80,16 @@ class CardItem extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        new CircleAvatar(
-                          backgroundColor: Colors.transparent,
-                          backgroundImage:
-                              AssetImage('assets/logo_sem_texto_teste.png'),
-                          radius: 20.0,
-                        ),
+                        CachedNetworkImage(
+                            fit: BoxFit.fill,
+                            width: 50,
+                            height: 50,
+                            placeholder: Image.asset(
+                              'assets/logo_sem_texto_teste.png',
+                              width: 50,
+                              height: 50,
+                            ),
+                            imageUrl: ''),
                         new Padding(
                           padding: EdgeInsets.fromLTRB(15.0, 0.0, 10.0, 0.0),
                           child: new Container(
@@ -92,7 +97,7 @@ class CardItem extends StatelessWidget {
                               decoration: BoxDecoration(
                                   border: Border.all(
                                       color: Colors.white, width: 1.0),
-                                  color: Colors.green[400],
+                                  color: Colors.blue[400],
                                   borderRadius: BorderRadius.circular(30.0)),
                               child: new Padding(
                                   padding: EdgeInsets.all(10.0),
