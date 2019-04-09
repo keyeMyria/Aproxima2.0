@@ -4,7 +4,6 @@ import 'package:aproxima/Objetos/Protocolo.dart';
 import 'package:aproxima/Objetos/Secretaria.dart';
 import 'package:aproxima/Widgets/FeedUtils/Feed.dart';
 import 'package:aproxima/Widgets/ModoLista/ModoListaController.dart';
-import 'package:aproxima/Widgets/PaginaPrincipal/PaginaPrincipalPage.dart';
 import 'package:date_range_picker/date_range_picker.dart' as DateRagePicker;
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -47,9 +46,10 @@ class _ModoListaWidgetState extends State<ModoListaWidget> {
                 builder: (context, snap) {
                   if (snap.hasData) {
                     return new AppBar(
+                        backgroundColor: Colors.white,
                         title: snap.data
                             ? new TextField(
-                                style: TextStyle(color: Colors.white),
+                                style: TextStyle(color: Helpers.blue_default),
                                 controller: _filter,
                                 focusNode: myFocusNode,
                                 onEditingComplete: () {
@@ -68,7 +68,7 @@ class _ModoListaWidgetState extends State<ModoListaWidget> {
                                     suffixIcon: new IconButton(
                                         icon: Icon(
                                           Icons.search,
-                                          color: Colors.white,
+                                          color: Helpers.blue_default,
                                         ),
                                         onPressed: () {
                                           mlc.UpdateFilter(true);
@@ -77,13 +77,23 @@ class _ModoListaWidgetState extends State<ModoListaWidget> {
                                           );
                                         }),
                                     hintText: 'Procurar...',
-                                    hintStyle: TextStyle(color: Colors.white)),
+                                    hintStyle:
+                                        TextStyle(color: Helpers.blue_default)),
                               )
-                            : new Text(Helpers.user.cidade.cidade),
+                            : new Text(
+                                Helpers.user.cidade.cidade,
+                                style: TextStyle(color: Helpers.blue_default),
+                              ),
                         leading: IconButton(
                             icon: snap.data
-                                ? Icon(Icons.close)
-                                : Icon(Icons.search),
+                                ? Icon(
+                                    Icons.close,
+                                    color: Helpers.blue_default,
+                                  )
+                                : Icon(
+                                    Icons.search,
+                                    color: Helpers.blue_default,
+                                  ),
                             onPressed: () {
                               if (snap.data == true) {
                                 filteredNames = names;
@@ -97,7 +107,10 @@ class _ModoListaWidgetState extends State<ModoListaWidget> {
                         actions: [
                           StreamBuilder(builder: (context, snap) {
                             return IconButton(
-                              icon: Icon(Icons.date_range),
+                              icon: Icon(
+                                Icons.date_range,
+                                color: Helpers.blue_default,
+                              ),
                               onPressed: () async {
                                 final List<DateTime> picked =
                                     await DateRagePicker.showDatePicker(
@@ -115,7 +128,10 @@ class _ModoListaWidgetState extends State<ModoListaWidget> {
                             );
                           }),
                           PopupMenuButton<Choice>(
-                            icon: Icon(Icons.filter_list),
+                            icon: Icon(
+                              Icons.filter_list,
+                              color: Helpers.blue_default,
+                            ),
                             onSelected: (choise) {
                               mlc.UpdateFilterByStatus(true);
                               mlc.StartFilter(c: choise);
@@ -135,7 +151,8 @@ class _ModoListaWidgetState extends State<ModoListaWidget> {
                               builder: (context, snap) {
                                 if (snap.hasData) {
                                   return PopupMenuButton<Secretaria>(
-                                    icon: Icon(Icons.local_printshop),
+                                    icon: Icon(Icons.local_printshop,
+                                        color: Helpers.blue_default),
                                     onSelected: (choise) {
                                       mlc.UpdateFilterBySecretaria(true);
                                       mlc.StartFilter(s: choise);
@@ -187,7 +204,7 @@ class _ModoListaWidgetState extends State<ModoListaWidget> {
                         children: <Widget>[
                           IconButton(
                             icon: Icon(Icons.info),
-                            color: Colors.blueAccent,
+                            color: Helpers.green_default,
                             onPressed: () {
                               mlc.outshowFilters.first.then((b) {
                                 mlc.UpdateShowFilters(!b);
@@ -332,7 +349,8 @@ class _ModoListaWidgetState extends State<ModoListaWidget> {
                                                             color:
                                                                 Colors.white),
                                                       ),
-                                                      color: Colors.blueAccent,
+                                                      color:
+                                                          Helpers.green_default,
                                                       onPressed: () {
                                                         mlc.UpdateFilterBySecretaria(
                                                             false);
@@ -365,10 +383,11 @@ class _ModoListaWidgetState extends State<ModoListaWidget> {
                   children: <Widget>[
                     Text(
                       'Carregando Dados',
-                      style: TextStyle(color: Colors.blue, fontSize: 32.0),
+                      style: TextStyle(
+                          color: Helpers.green_default, fontSize: 32.0),
                     ),
                     SpinKitThreeBounce(
-                      color: Colors.blue,
+                      color: Helpers.green_default,
                       size: 50.0,
                     )
                   ],
@@ -385,21 +404,6 @@ class _ModoListaWidgetState extends State<ModoListaWidget> {
       idleText: 'Mais...',
       noDataText: 'Fim dos Relatos',
     );
-  }
-
-  Choice _selectedChoice = MenuPrincipal[0];
-  void _select(Choice choice) {
-    // Causes the app to rebuild with the new _selectedChoice.
-    setState(() {
-      _selectedChoice = choice;
-      if (choice.title == "Lista") {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => ModoListaPage(),
-            ));
-      }
-    });
   }
 
   AppBar buildAppBar(BuildContext context) {

@@ -1,3 +1,4 @@
+import 'package:aproxima/Helpers/Helpers.dart';
 import 'package:aproxima/Widgets/News/NewsController.dart';
 import 'package:aproxima/Widgets/News/NewsWidget.dart';
 import 'package:bloc_pattern/bloc_pattern.dart';
@@ -16,10 +17,11 @@ class _NewsPageState extends State<NewsPage> {
       child: Scaffold(
         body: Container(child: NewsWidget()),
         appBar: new AppBar(
-          leading: Container(),
+          backgroundColor: Colors.white,
+          automaticallyImplyLeading: false,
           title: new Text(
-            "Notificacões",
-            style: new TextStyle(color: Colors.white),
+            "Notificações",
+            style: new TextStyle(color: Helpers.blue_default),
           ),
         ),
       ),

@@ -105,10 +105,12 @@ class _MapPageState extends State<MapPage> {
         height: 15.0,
         width: 15.0,
         decoration: BoxDecoration(
-          color: i == selecionado ? Colors.blue : Colors.transparent,
+          color: i == selecionado ? Helpers.green_default : Colors.transparent,
           borderRadius: BorderRadius.all(Radius.circular(10.0)),
           border: Border.all(
-              color: Colors.blue, width: 1.0, style: BorderStyle.solid),
+              color: Helpers.green_default,
+              width: 1.0,
+              style: BorderStyle.solid),
         ),
       ));
     }

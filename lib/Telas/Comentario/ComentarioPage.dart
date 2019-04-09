@@ -171,7 +171,7 @@ class _ComentarioPageState extends State<ComentarioPage> {
                               },
                               icon: Icon(
                                 Icons.send,
-                                color: Colors.blue,
+                                color: Helpers.green_default,
                               ),
                             )),
                         new Divider(),
@@ -183,11 +183,15 @@ class _ComentarioPageState extends State<ComentarioPage> {
               ),
             ]),
             appBar: new AppBar(
+              automaticallyImplyLeading: false,
               actions: <Widget>[
                 Helpers.user.id == snapProtocolo.data.user_id ||
                         Helpers.user.permissao >= 2
                     ? IconButton(
-                        icon: Icon(Icons.edit),
+                        icon: Icon(
+                          Icons.edit,
+                          color: Helpers.blue_default,
+                        ),
                         onPressed: () {
                           Navigator.push(
                               context,
@@ -202,7 +206,7 @@ class _ComentarioPageState extends State<ComentarioPage> {
                     ? IconButton(
                         icon: Icon(
                           Icons.add,
-                          color: Colors.white,
+                          color: Helpers.blue_default,
                           semanticLabel: 'Dar Andamento',
                         ),
                         onPressed: () {
@@ -214,9 +218,9 @@ class _ComentarioPageState extends State<ComentarioPage> {
               ],
               title: new Text(
                 snapProtocolo.data.titulo,
-                style: new TextStyle(color: Colors.white),
+                style: new TextStyle(color: Helpers.blue_default),
               ),
-              backgroundColor: Colors.blue,
+              backgroundColor: Colors.white,
             ),
           );
         });

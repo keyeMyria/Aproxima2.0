@@ -27,7 +27,7 @@ class FriendDetailHeader extends StatelessWidget {
         width: 150,
         height: 150,
         placeholder: Image.asset(
-          'assets/logo_sem_texto_teste.png',
+          'assets/logo.png',
           width: 150,
           height: 150,
         ),
@@ -73,8 +73,7 @@ class FriendDetailHeader extends StatelessWidget {
       ),
       child: new Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-        ],
+        children: <Widget>[],
       ),
     );
   }

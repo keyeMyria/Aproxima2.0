@@ -7,6 +7,7 @@ import 'package:aproxima/Helpers/Drawer.dart';
 import 'package:aproxima/Helpers/Helpers.dart';
 import 'package:aproxima/Helpers/radialmenu/src/radial_menu.dart';
 import 'package:aproxima/Helpers/radialmenu/src/radial_menu_item.dart';
+import 'package:aproxima/Objetos/Apoio.dart';
 import 'package:aproxima/Objetos/Cidade.dart';
 import 'package:aproxima/Objetos/Protocolo.dart';
 import 'package:aproxima/Objetos/Secretaria.dart';
@@ -15,6 +16,7 @@ import 'package:aproxima/Telas/Comentario/ComentarioPage.dart';
 import 'package:aproxima/Telas/Mapa/MapaController.dart';
 import 'package:aproxima/Telas/Mapa2/ControllerSnackBar.dart';
 import 'package:aproxima/Telas/UserProfile/friend_details_page.dart';
+import 'package:aproxima/Widgets/FeedUtils/ApoioProtocoloController.dart';
 import 'package:aproxima/Widgets/FeedUtils/Bolinhas.dart';
 import 'package:aproxima/Widgets/FeedUtils/FotoPage.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -25,7 +27,9 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:latlong/latlong.dart';
+import 'package:share/share.dart';
 import 'package:unicorndial/unicorndial.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 enum MenuOptions {
   unread,
@@ -67,8 +71,6 @@ class MapsDemoState extends State<Mapa> {
     super.initState();
     myFocusNode = FocusNode();
   }
-
-  Choice _selectedChoice = MenuPrincipal[0]; // The app's "state".
 
   final TextEditingController _filter = new TextEditingController();
   String _searchText = "";
@@ -139,9 +141,11 @@ class MapsDemoState extends State<Mapa> {
                     builder: (context, snap) {
                       if (snap.hasData) {
                         return new AppBar(
+                            backgroundColor: Colors.white,
                             title: snap.data
                                 ? new TextField(
-                                    style: TextStyle(color: Colors.white),
+                                    style:
+                                        TextStyle(color: Helpers.blue_default),
                                     controller: _filter,
                                     focusNode: myFocusNode,
                                     onEditingComplete: () {
@@ -160,7 +164,7 @@ class MapsDemoState extends State<Mapa> {
                                         suffixIcon: new IconButton(
                                             icon: Icon(
                                               Icons.search,
-                                              color: Colors.white,
+                                              color: Helpers.blue_default,
                                             ),
                                             onPressed: () {
                                               mapc.UpdateFilter(true);
@@ -169,14 +173,24 @@ class MapsDemoState extends State<Mapa> {
                                               );
                                             }),
                                         hintText: 'Procurar...',
-                                        hintStyle:
-                                            TextStyle(color: Colors.white)),
+                                        hintStyle: TextStyle(
+                                            color: Helpers.blue_default)),
                                   )
-                                : new Text(Helpers.user.cidade.cidade),
+                                : new Text(
+                                    Helpers.user.cidade.cidade,
+                                    style:
+                                        TextStyle(color: Helpers.blue_default),
+                                  ),
                             leading: IconButton(
                                 icon: snap.data
-                                    ? Icon(Icons.close)
-                                    : Icon(Icons.search),
+                                    ? Icon(
+                                        Icons.close,
+                                        color: Helpers.blue_default,
+                                      )
+                                    : Icon(
+                                        Icons.search,
+                                        color: Helpers.blue_default,
+                                      ),
                                 onPressed: () {
                                   if (snap.data == true) {
                                     filteredNames = names;
@@ -190,7 +204,10 @@ class MapsDemoState extends State<Mapa> {
                             actions: [
                               StreamBuilder(builder: (context, snap) {
                                 return IconButton(
-                                  icon: Icon(Icons.date_range),
+                                  icon: Icon(
+                                    Icons.date_range,
+                                    color: Helpers.blue_default,
+                                  ),
                                   onPressed: () async {
                                     final List<DateTime> picked =
                                         await DateRagePicker.showDatePicker(
@@ -211,7 +228,10 @@ class MapsDemoState extends State<Mapa> {
                                 );
                               }),
                               PopupMenuButton<Choice>(
-                                icon: Icon(Icons.filter_list),
+                                icon: Icon(
+                                  Icons.filter_list,
+                                  color: Helpers.blue_default,
+                                ),
                                 onSelected: (choise) {
                                   mapc.UpdateFilterByStatus(true);
                                   mapc.StartFilter(c: choise);
@@ -231,7 +251,10 @@ class MapsDemoState extends State<Mapa> {
                                   builder: (context, snap) {
                                     if (snap.hasData) {
                                       return PopupMenuButton<Secretaria>(
-                                        icon: Icon(Icons.local_printshop),
+                                        icon: Icon(
+                                          Icons.local_printshop,
+                                          color: Helpers.blue_default,
+                                        ),
                                         onSelected: (choise) {
                                           mapc.UpdateFilterBySecretaria(true);
                                           mapc.StartFilter(s: choise);
@@ -302,7 +325,7 @@ class MapsDemoState extends State<Mapa> {
                           children: <Widget>[
                             IconButton(
                               icon: Icon(Icons.info),
-                              color: Colors.blueAccent,
+                              color: Helpers.green_default,
                               onPressed: () {
                                 mapc.outshowFilters.first.then((b) {
                                   mapc.UpdateShowFilters(!b);
@@ -322,7 +345,7 @@ class MapsDemoState extends State<Mapa> {
                                             margin:
                                                 EdgeInsets.fromLTRB(0, 0, 0, 0),
                                             color: Color.fromARGB(
-                                                60, 160, 160, 160),
+                                                150, 160, 160, 160),
                                             height: MediaQuery.of(context)
                                                     .size
                                                     .height *
@@ -453,8 +476,8 @@ class MapsDemoState extends State<Mapa> {
                                                               color:
                                                                   Colors.white),
                                                         ),
-                                                        color:
-                                                            Colors.blueAccent,
+                                                        color: Helpers
+                                                            .green_default,
                                                         onPressed: () {
                                                           mapc.UpdateFilterBySecretaria(
                                                               false);
@@ -500,15 +523,13 @@ class MapsDemoState extends State<Mapa> {
             height: 45.0,
             point: new LatLng(p.lat, p.lng),
             builder: (ctx) => Container(
-                child: IconButton(
-                    onPressed: () {
-                      print('CLICOU');
-                      _showDialog(p);
-                    },
-                    icon: Icon(
-                      Icons.place,
-                      color: getStatus(p.status.descricao),
-                    )))),
+                    child: IconButton(
+                  onPressed: () {
+                    print('CLICOU');
+                    _showDialog(p);
+                  },
+                  icon: getStatus(p.status.descricao),
+                ))),
       );
     }
     return markers;
@@ -522,22 +543,28 @@ class MapsDemoState extends State<Mapa> {
       child: Row(
         children: <Widget>[
           GestureDetector(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => FriendDetailsPage(
-                            post.usuario, false, 0,
-                            avatarTag:
-                                post.usuario.id.toString() + post.id.toString(),
-                            isuser: false)));
-              },
-              child: CircleAvatar(
-                radius: 25.0,
-                backgroundImage: CachedNetworkImageProvider(
-                  post.usuario.foto,
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => FriendDetailsPage(
+                          post.usuario, false, 0,
+                          avatarTag:
+                              post.usuario.id.toString() + post.id.toString(),
+                          isuser: false)));
+            },
+            child: CachedNetworkImage(
+                fit: BoxFit.fill,
+                width: 50,
+                height: 50,
+                placeholder: Image.asset(
+                  'assets/logo.png',
+                  width: 50,
+                  height: 50,
                 ),
-              )),
+                imageUrl:
+                    'https://firebasestorage.googleapis.com/v0/b/aproximamais-b84ee.appspot.com/o/usuarios%2F${post.usuario.id}.jpeg?alt=media&token=5cae4fd3-d3d4-44e4-893a-2349f6fda687'),
+          ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -578,19 +605,19 @@ class MapsDemoState extends State<Mapa> {
     //print('Status: ${status}');
     switch (status) {
       case 'Em Andamento':
-        c = Colors.lightBlueAccent;
+        c = Helpers.orange_default;
         break;
 
       case 'Enviado':
-        c = Colors.yellowAccent;
+        c = Helpers.yellow_default;
         break;
 
       case 'Encaminhado':
-        c = Colors.orangeAccent;
+        c = Helpers.blue_default;
         break;
 
       case 'Concluído':
-        c = Colors.greenAccent;
+        c = Helpers.green_default;
         break;
 
       case 'Excluído':
@@ -626,64 +653,154 @@ class MapsDemoState extends State<Mapa> {
                 ])));
   }
 
+  bool hideComment = false;
   Widget actionColumn(Protocolo post, BuildContext context) {
+    ApoioProtocoloController apc = new ApoioProtocoloController(post);
+    bool userLiked = false;
+
     return Padding(
         padding: EdgeInsets.all(10.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Row(
+        child: GestureDetector(
+            onTap: () {
+              if (!hideComment) {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ComentarioPage(post)));
+              }
+            },
+            child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                IconButton(
-                  icon: Icon(Icons.favorite_border),
-                  color: Colors.blue[500],
-                  onPressed: () {},
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    StreamBuilder(
+                      stream: apc.outApoio,
+                      builder: (context, AsyncSnapshot<List<Apoio>> snap) {
+                        Apoio apoio = null;
+                        bool userLiked = false;
+                        if (snap.hasData) {
+                          for (Apoio a in snap.data) {
+                            if (a.id == Helpers.user.id) {
+                              userLiked = true;
+                              apoio = a;
+                            }
+                          }
+                        }
+                        return IconButton(
+                          icon: Container(
+                            height: 60,
+                            width: 60,
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Icon(
+                                  userLiked ? Icons.thumb_up : Icons.thumb_up,
+                                  size: 25,
+                                  color: userLiked
+                                      ? Helpers.green_default
+                                      : Colors.grey,
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 2),
+                                ),
+                                Text(
+                                  snap.hasData
+                                      ? snap.data.length.toString()
+                                      : '',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: userLiked
+                                          ? Helpers.green_default
+                                          : Colors.grey,
+                                      fontSize: 14),
+                                )
+                              ],
+                            ),
+                          ),
+                          iconSize: 40,
+                          color: Helpers.green_default,
+                          onPressed: () {
+                            !userLiked
+                                ? apc.ApoiarProtocolo(post)
+                                : apc.DesapoiarProtocolo(post, apoio);
+                          },
+                        );
+                      },
+                    ),
+                    hideComment
+                        ? new Container()
+                        : IconButton(
+                            icon: Icon(Icons.chat_bubble_outline),
+                            color: Helpers.green_default,
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          ComentarioPage(post)));
+                            },
+                          ),
+                    IconButton(
+                      icon: Icon(Icons.share),
+                      color: Helpers.green_default,
+                      onPressed: () {
+                        Helpers.nh.getDL(post, true).then((link) {
+                          Share.share('${link}');
+                        }).catchError((err) {
+                          print('error:${err.toString()}');
+                        });
+                      },
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.directions),
+                      color: Helpers.green_default,
+                      onPressed: () {
+                        goToLocation(post);
+                      },
+                    ),
+                  ],
                 ),
-                IconButton(
-                  icon: Icon(Icons.chat_bubble_outline),
-                  color: Colors.blue[500],
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ComentarioPage(post)));
-                  },
-                ),
-              ],
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: 10, bottom: 10),
-              child: Text(
-                post.titulo,
-                style: TextStyle(
-                    fontWeight: FontWeight.w800,
-                    fontSize: 20,
-                    color: Colors.black,
-                    fontStyle: FontStyle.italic),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: 10, bottom: 10),
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: getTagss(post.tags),
-                ),
-              ),
-            ),
-            Padding(
-                padding: EdgeInsets.only(left: 10, bottom: 4),
-                child: Text(post.descricao,
-                    maxLines: 999,
+                Padding(
+                  padding: EdgeInsets.only(left: 10, bottom: 10),
+                  child: Text(
+                    post.titulo,
                     style: TextStyle(
-                      fontWeight: FontWeight.normal,
-                      fontSize: 17,
-                      color: Colors.black,
-                    ))),
-          ],
-        ));
+                        fontWeight: FontWeight.w800,
+                        fontSize: 20,
+                        fontStyle: FontStyle.italic),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: 10, bottom: 10),
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: getTagss(post.tags),
+                    ),
+                  ),
+                ),
+                Padding(
+                    padding: EdgeInsets.only(left: 10, bottom: 4),
+                    child: Text(post.descricao,
+                        maxLines: 999,
+                        style: TextStyle(
+                            fontWeight: FontWeight.normal, fontSize: 17))),
+              ],
+            )));
+  }
+
+  Future goToLocation(Protocolo post) async {
+    final url =
+        'https://www.google.com/maps/search/?api=1&query=${post.lat},${post.lng}';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 
   void _showDialog(Protocolo pr) {
@@ -717,27 +834,7 @@ class MapsDemoState extends State<Mapa> {
                           Padding(
                             padding: EdgeInsets.only(bottom: 2),
                           ),
-                          new Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: <Widget>[
-                              IconButton(
-                                icon: Icon(Icons.favorite_border),
-                                color: Colors.blue[500],
-                                onPressed: () {},
-                              ),
-                              IconButton(
-                                icon: Icon(Icons.chat_bubble_outline),
-                                color: Colors.blue[500],
-                                onPressed: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              ComentarioPage(p)));
-                                },
-                              ),
-                            ],
-                          ),
+                          actionColumn(p, context),
                           Padding(
                             padding: EdgeInsets.symmetric(
                               horizontal: 5,
@@ -830,7 +927,8 @@ class MapsDemoState extends State<Mapa> {
                                                             p.fotos[i].link,
                                                         placeholder:
                                                             SpinKitThreeBounce(
-                                                          color: Colors.blue,
+                                                          color: Helpers
+                                                              .green_default,
                                                           size: 50,
                                                         ),
                                                         fit: BoxFit.fill,
@@ -923,10 +1021,12 @@ class MapsDemoState extends State<Mapa> {
         height: 15.0,
         width: 15.0,
         decoration: BoxDecoration(
-          color: i == selecionado ? Colors.blue : Colors.transparent,
+          color: i == selecionado ? Helpers.green_default : Colors.transparent,
           borderRadius: BorderRadius.all(Radius.circular(10.0)),
           border: Border.all(
-              color: Colors.blue, width: 1.0, style: BorderStyle.solid),
+              color: Helpers.green_default,
+              width: 1.0,
+              style: BorderStyle.solid),
         ),
       ));
     }
@@ -941,8 +1041,8 @@ class MapsDemoState extends State<Mapa> {
           padding: EdgeInsets.symmetric(horizontal: 3),
           child: Text(
             '#' + tags[i].tag.tag_nome,
-            style:
-                TextStyle(fontStyle: FontStyle.italic, color: Colors.blue[900]),
+            style: TextStyle(
+                fontStyle: FontStyle.italic, color: Helpers.green_default),
           ),
         ),
       ));
@@ -965,31 +1065,52 @@ class MapsDemoState extends State<Mapa> {
     );
   }
 
-  Color getStatus(String status) {
+  Widget getStatus(String status) {
     Color c;
+    Widget w;
     //print('Status: ${status}');
     switch (status) {
       case 'Em Andamento':
-        c = Colors.lightBlueAccent;
+        c = Helpers.orange_default;
+        w = Image(
+          image: AssetImage('assets/marker_orange.png'),
+          height: 35,
+          width: 20,
+        );
         break;
 
       case 'Enviado':
-        c = Colors.yellowAccent;
+        c = Helpers.yellow_default;
+        w = Image(
+          image: AssetImage('assets/marker_yellow.png'),
+          height: 35,
+          width: 20,
+        );
         break;
 
       case 'Encaminhado':
-        c = Colors.orangeAccent;
+        c = Helpers.blue_default;
+        w = Image(
+          image: AssetImage('assets/marker_blue.png'),
+          height: 35,
+          width: 20,
+        );
         break;
 
       case 'Concluído':
-        c = Colors.greenAccent;
+        w = Image(
+          image: AssetImage('assets/marker_green.png'),
+          height: 35,
+          width: 20,
+        );
+        c = Helpers.green_default;
         break;
 
       case 'Excluído':
         c = Colors.red;
         break;
     }
-    return c;
+    return w;
   }
 
   List<Widget> Statuses() {
@@ -1002,7 +1123,7 @@ class MapsDemoState extends State<Mapa> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                Icon(choice.icon, color: choice.color),
+                choice.icon,
                 Padding(
                   padding: EdgeInsets.only(left: 5.0),
                 ),

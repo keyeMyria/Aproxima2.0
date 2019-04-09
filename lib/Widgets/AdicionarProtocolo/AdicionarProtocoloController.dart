@@ -48,6 +48,10 @@ class AdicionarProtocoloController implements BlocBase {
   Stream<double> get outZoom => _controllerZoom.stream;
   Sink<double> get inZoom => _controllerZoom.sink;
 
+  BehaviorSubject<String> _controllerLoading = new BehaviorSubject<String>();
+  Stream<String> get outLoading => _controllerLoading.stream;
+  Sink<String> get inLoading => _controllerLoading.sink;
+
   /*BehaviorSubject<List<Asset>> _controllerFotosGaleria =
       new BehaviorSubject<List<Asset>>();
   Stream<List<Asset>> get outFotosGaleria => _controllerFotosGaleria.stream;
@@ -60,6 +64,7 @@ class AdicionarProtocoloController implements BlocBase {
     _controllerPage.close();
     _controllerLocation.close();
     _controllerZoom.close();
+    _controllerLoading.close();
   }
 
   AdicionarProtocoloController() {
@@ -185,6 +190,7 @@ class AdicionarProtocoloController implements BlocBase {
   Future CadastrarProtocolo(String descricao, String titulo) {
     List<Foto> f = new List();
     return outFotos.first.then((fotos) {
+      inLoading.add(' Verificando Fotos');
       if (fotos != null) {
         for (Foto ff in fotos) {
           if (ff.isSelected) {
@@ -196,6 +202,7 @@ class AdicionarProtocoloController implements BlocBase {
       }
       if (tc.SelectedTag != null) {
         return outLocation.first.then((latlng) async {
+          inLoading.add(' Adicionando Assuntos');
           if (latlng != null) {
             /*
             params.put("lat",p.getLat());
@@ -245,6 +252,7 @@ class AdicionarProtocoloController implements BlocBase {
                     'http://www.aproximamais.net/webservice/json.php?cadastrarprotocolo=true&t=${DateTime.now().millisecondsSinceEpoch}',
                     body: body)
                 .then((response) {
+              inLoading.add(' Cadastrando Relato!');
               print('Protocolo RESPONSE ${response.body}');
               var j = json.decode(response.body);
               Protocolo p;
@@ -270,6 +278,7 @@ class AdicionarProtocoloController implements BlocBase {
                         'http://www.aproximamais.net/webservice/json.php?inserirtagprotcolo=true&t=${DateTime.now().millisecondsSinceEpoch}',
                         body: tagbody)
                     .then((responseTag) async {
+                  inLoading.add(' Validando Dados!');
                   print('TAG RESPONSE ${responseTag.body}');
 
                   Protocolo ppp;
@@ -310,6 +319,7 @@ class AdicionarProtocoloController implements BlocBase {
                             'http://www.aproximamais.net/webservice/json.php?CadastrarFotos=true&t=${DateTime.now().millisecondsSinceEpoch}',
                             body: fotosArrayBody)
                         .then((responseFotos) async {
+                      inLoading.add(' Adicionando Localização!');
                       print('FOTO RESPONSE ${responseFotos.body}');
                       Protocolo pp;
                       for (var v in j) {
@@ -317,6 +327,7 @@ class AdicionarProtocoloController implements BlocBase {
                         pp = new Protocolo.fromJson(v);
                       }
                       print('CADASTRADO COM SUCESSO TUDO ${pp.toString()}');
+                      inLoading.add(' Notificando Funcionarios!');
                       if (pp != null) {
                         print(' UPDATES ${pp.updates_protocolos}');
                         print(' FOTOS ${pp.fotos}');

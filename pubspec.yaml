@@ -15,7 +15,8 @@ dependencies:
     sdk: flutter
   pull_to_refresh: ^1.1.5
   drawing_animation: 0.0.4
-  #flutter_sequence_animation: ^3.0.1
+  geolocator: ^3.0.1
+  flutter_sequence_animation: ^3.0.1
   firebase_dynamic_links:
   firebase_storage: 2.0.0
   #cloud_firestore: 0.3.0

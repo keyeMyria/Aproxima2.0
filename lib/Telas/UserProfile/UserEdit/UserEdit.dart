@@ -42,14 +42,14 @@ class _UserEditState extends State<UserEditPage> {
                   },
                   child: Text(
                     'Sair',
-                    style: TextStyle(color: Colors.blue[900]),
+                    style: TextStyle(color: Helpers.green_default),
                   ),
                 ),
                 MaterialButton(
                   onPressed: () => updateProfilePicture(),
                   child: Text(
                     'Confirmar',
-                    style: TextStyle(color: Colors.blue[900]),
+                    style: TextStyle(color: Helpers.green_default),
                   ),
                 )
               ],
@@ -68,14 +68,14 @@ class _UserEditState extends State<UserEditPage> {
                           },
                           child: Icon(
                             Icons.photo,
-                            color: Colors.blue[900],
+                            color: Helpers.green_default,
                           )),
                       MaterialButton(
                           onPressed: () {
                             getImage(ImageSource.camera);
                           },
-                          child:
-                              Icon(Icons.camera_alt, color: Colors.blue[900]))
+                          child: Icon(Icons.camera_alt,
+                              color: Helpers.green_default))
                     ],
                   ),
                   StreamBuilder(
@@ -92,11 +92,11 @@ class _UserEditState extends State<UserEditPage> {
                             height: 150,
                             decoration: BoxDecoration(
                                 border: Border.all(
-                                    color: Colors.blue[900], width: 4)),
+                                    color: Helpers.green_default, width: 4)),
                             child: Center(
                               child: Icon(
                                 Icons.add_a_photo,
-                                color: Colors.blue[900],
+                                color: Helpers.green_default,
                                 size: 80,
                               ),
                             ),
@@ -165,6 +165,7 @@ class _UserEditState extends State<UserEditPage> {
             }
             return Scaffold(
                 appBar: AppBar(
+                  backgroundColor: Helpers.green_default,
                   title: Text('Editar Perfil'),
                   actions: <Widget>[
                     IconButton(
@@ -196,7 +197,8 @@ class _UserEditState extends State<UserEditPage> {
                         }),
                   ],
                 ),
-                body: Column(
+                body: SingleChildScrollView(
+                    child: Column(
                   children: <Widget>[
                     Padding(
                       padding: const EdgeInsets.only(top: 20.0, bottom: 12.0),
@@ -205,7 +207,7 @@ class _UserEditState extends State<UserEditPage> {
                           width: 150,
                           height: 150,
                           placeholder: Image.asset(
-                            'assets/logo_sem_texto_teste.png',
+                            'assets/logo.png',
                             width: 150,
                             height: 150,
                           ),
@@ -220,8 +222,8 @@ class _UserEditState extends State<UserEditPage> {
                             top: 5, bottom: 30, left: 15, right: 15),
                         child: new Text(
                           "Trocar Foto",
-                          style: const TextStyle(
-                              color: Colors.blue,
+                          style: TextStyle(
+                              color: Helpers.green_default,
                               fontSize: 20.0,
                               fontWeight: FontWeight.bold),
                         )),
@@ -232,7 +234,7 @@ class _UserEditState extends State<UserEditPage> {
                         decoration: InputDecoration(
                             icon: Icon(
                               Icons.account_circle,
-                              color: Colors.blue,
+                              color: Helpers.green_default,
                             ),
                             border: OutlineInputBorder(
                                 borderRadius:
@@ -245,7 +247,7 @@ class _UserEditState extends State<UserEditPage> {
                             labelText: 'Nome Completo',
                             hintStyle: TextStyle(
                                 fontSize: 14.0,
-                                color: Colors.grey,
+                                color: Helpers.green_default,
                                 fontStyle: FontStyle.italic)),
                       ),
                     ),
@@ -257,7 +259,7 @@ class _UserEditState extends State<UserEditPage> {
                         decoration: InputDecoration(
                             icon: Icon(
                               Icons.date_range,
-                              color: Colors.blue,
+                              color: Helpers.green_default,
                             ),
                             border: OutlineInputBorder(
                                 borderRadius:
@@ -270,7 +272,7 @@ class _UserEditState extends State<UserEditPage> {
                             labelText: 'Data de Nascimento',
                             hintStyle: TextStyle(
                                 fontSize: 14.0,
-                                color: Colors.grey,
+                                color: Helpers.green_default,
                                 fontStyle: FontStyle.italic)),
                       ),
                     ),
@@ -282,7 +284,7 @@ class _UserEditState extends State<UserEditPage> {
                         decoration: InputDecoration(
                             icon: Icon(
                               Icons.phone_iphone,
-                              color: Colors.blue,
+                              color: Helpers.green_default,
                             ),
                             border: OutlineInputBorder(
                                 borderRadius:
@@ -295,12 +297,12 @@ class _UserEditState extends State<UserEditPage> {
                             labelText: 'Celular',
                             hintStyle: TextStyle(
                                 fontSize: 14.0,
-                                color: Colors.grey,
+                                color: Helpers.green_default,
                                 fontStyle: FontStyle.italic)),
                       ),
                     ),
                   ],
-                ));
+                )));
           }
         });
   }

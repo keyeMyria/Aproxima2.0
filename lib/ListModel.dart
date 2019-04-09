@@ -1,3 +1,4 @@
+import 'package:aproxima/Helpers/Helpers.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -85,7 +86,7 @@ class CardItem extends StatelessWidget {
                             width: 50,
                             height: 50,
                             placeholder: Image.asset(
-                              'assets/logo_sem_texto_teste.png',
+                              'assets/logo.png',
                               width: 50,
                               height: 50,
                             ),
@@ -97,7 +98,7 @@ class CardItem extends StatelessWidget {
                               decoration: BoxDecoration(
                                   border: Border.all(
                                       color: Colors.white, width: 1.0),
-                                  color: Colors.blue[400],
+                                  color: Helpers.blue_default,
                                   borderRadius: BorderRadius.circular(30.0)),
                               child: new Padding(
                                   padding: EdgeInsets.all(10.0),

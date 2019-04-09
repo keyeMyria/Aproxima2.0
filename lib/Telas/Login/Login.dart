@@ -153,7 +153,7 @@ class _LoginPageState extends State<LoginPage> {
       borderRadius: BorderRadius.circular(10.00),
       gapPadding: 4.00,
       borderSide: BorderSide(
-          width: 2.00, style: BorderStyle.solid, color: Colors.white));
+          width: 0.00, style: BorderStyle.solid, color: Colors.white));
   final _formKey = GlobalKey<FormState>();
   String _selectedItem;
   final scaffoldKey = new GlobalKey<ScaffoldState>();
@@ -254,10 +254,10 @@ class _LoginPageState extends State<LoginPage> {
                 colors: [
                   // Colors are easy thanks to Flutter's
                   // Colors class.
-                  Colors.blue[800],
-                  Colors.blue[700],
-                  Colors.blue[600],
-                  Colors.blue[400],
+                  Colors.white,
+                  Colors.white,
+                  Colors.white,
+                  Colors.white,
                 ],
               ),
             ),
@@ -301,12 +301,11 @@ class _LoginPageState extends State<LoginPage> {
                                 decoration: InputDecoration(
                                     filled: true,
                                     fillColor: Colors.white,
-                                    suffixIcon: Icon(
+                                    prefixIcon: Icon(
                                       Icons.email,
-                                      color: Colors.black,
+                                      color: Helpers.green_default,
                                     ),
                                     helperStyle: txs,
-                                    border: oib,
                                     hintText: 'Email',
                                     hintStyle:
                                         TextStyle(color: Colors.black54)),
@@ -343,12 +342,11 @@ class _LoginPageState extends State<LoginPage> {
                                 decoration: InputDecoration(
                                     filled: true,
                                     fillColor: Colors.white,
-                                    suffixIcon: Icon(
+                                    prefixIcon: Icon(
                                       Icons.lock,
-                                      color: Colors.black,
+                                      color: Helpers.green_default,
                                     ),
                                     helperStyle: txs,
-                                    border: oib,
                                     hintText: 'Senha',
                                     hintStyle:
                                         TextStyle(color: Colors.black54)),
@@ -367,8 +365,7 @@ class _LoginPageState extends State<LoginPage> {
                             style: txs,
                             textAlign: TextAlign.center,
                           ),
-                          color: Colors.black,
-                          shape: oib,
+                          color: Helpers.green_default,
                         )
                       ],
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -386,8 +383,7 @@ class _LoginPageState extends State<LoginPage> {
                             style: txs,
                             textAlign: TextAlign.center,
                           ),
-                          color: Colors.transparent,
-                          shape: oib,
+                          color: Helpers.green_default,
                         ),
                         new Padding(
                             padding: EdgeInsets.symmetric(horizontal: 10.0)),
@@ -405,8 +401,7 @@ class _LoginPageState extends State<LoginPage> {
                             style: txs,
                             textAlign: TextAlign.center,
                           ),
-                          color: Colors.transparent,
-                          shape: oib,
+                          color: Helpers.green_default,
                         )
                       ],
                       crossAxisAlignment: CrossAxisAlignment.center,

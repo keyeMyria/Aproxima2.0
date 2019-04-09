@@ -27,6 +27,10 @@ class Helpers {
   SharedPreferences prefs;
   static NotificacoesHelper nh = new NotificacoesHelper();
   static List<CameraDescription> cameras;
+  static Color green_default = Color.fromARGB(255, 1, 184, 160);
+  static Color blue_default = Color.fromARGB(255, 1, 102, 179);
+  static Color yellow_default = Color.fromARGB(255, 251, 217, 5);
+  static Color orange_default = Color.fromARGB(255, 172, 14, 2);
 
   static User aproximaUser = new User.withFoto(
       0,

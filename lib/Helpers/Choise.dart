@@ -5,34 +5,58 @@ class Choice {
   const Choice({this.title, this.icon, this.color});
 
   final String title;
-  final IconData icon;
+  final Widget icon;
   final Color color;
 }
 
 //TODO Buscar lista de departamentos por cidade
 
-const List<Choice> MenuPrincipal = const <Choice>[
-  const Choice(title: 'Lista', icon: Icons.list),
-  const Choice(title: 'Oficios Protocolados', icon: Icons.playlist_add_check),
-  const Choice(title: 'Termos de Uso', icon: Icons.assignment),
-  const Choice(title: 'Configurações', icon: Icons.settings),
-  const Choice(title: 'Contato', icon: Icons.phone),
-  const Choice(title: 'Ajuda', icon: Icons.help),
-  const Choice(title: 'Sair', icon: Icons.exit_to_app),
-];
-
 List<Choice> StatusChoises = <Choice>[
   Helpers.user.permissao >= 2
-      ? Choice(title: 'Enviado', icon: Icons.place, color: Colors.yellowAccent)
+      ? Choice(
+          title: 'Enviado',
+          icon: Image(
+              image: AssetImage('assets/marker_yellow.png'),
+              height: 30,
+              width: 20),
+          color: Colors.yellowAccent)
       : {},
-  Helpers.user.permissao >= 3
-      ? Choice(title: 'Excluído', icon: Icons.place, color: Colors.red)
-      : {},
-  Choice(title: 'Encaminhado', icon: Icons.place, color: Colors.orangeAccent),
   Choice(
-      title: 'Em Andamento', icon: Icons.place, color: Colors.lightBlueAccent),
-  Choice(title: 'Concluído', icon: Icons.place, color: Colors.greenAccent),
-  Choice(title: 'Todos', icon: Icons.all_inclusive, color: Colors.blueAccent),
+      title: 'Encaminhado',
+      icon: Image(
+          image: AssetImage('assets/marker_blue.png'), height: 30, width: 20),
+      color: Colors.blue),
+  Choice(
+      title: 'Em Andamento',
+      icon: Image(
+          image: AssetImage('assets/marker_orange.png'), height: 30, width: 20),
+      color: Colors.orange),
+  Choice(
+      title: 'Concluído',
+      icon: Image(
+        image: AssetImage('assets/marker_green.png'),
+        height: 30,
+        width: 20,
+      ),
+      color: Colors.greenAccent),
+  Helpers.user.permissao >= 3
+      ? Choice(
+          title: 'Excluído',
+          icon: Image(
+              image: AssetImage('assets/marker_red.png'),
+              height: 30,
+              width: 20),
+          color: Colors.red)
+      : {},
+  Choice(
+    title: 'Todos',
+    icon: Icon(
+      Icons.all_inclusive,
+      size: 25,
+      color: Helpers.blue_default,
+    ),
+    color: Colors.blueAccent,
+  ),
 ];
 
 class ChoiceCard extends StatelessWidget {
@@ -48,7 +72,7 @@ class ChoiceCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          Icon(choice.icon, color: choice.color),
+          choice.icon,
           Padding(
             padding: EdgeInsets.only(left: 5.0),
           ),

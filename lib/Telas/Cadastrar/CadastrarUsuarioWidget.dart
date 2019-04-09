@@ -1,3 +1,4 @@
+import 'package:aproxima/Helpers/Helpers.dart';
 import 'package:aproxima/Objetos/Cidade.dart';
 import 'package:aproxima/Objetos/Estado.dart';
 import 'package:aproxima/Objetos/Pais.dart';
@@ -19,6 +20,7 @@ class CadastrarUsuarioWidget extends StatefulWidget {
 class _CadastrarUsuarioWidgetState extends State<CadastrarUsuarioWidget> {
   final _formKey = GlobalKey<FormState>();
 
+  CadastrarUsuarioController cuc;
   var controllerTelefone =
       new MaskedTextController(text: '', mask: '(00) 0 0000-0000');
   var controllerDataNascimento =
@@ -34,13 +36,13 @@ class _CadastrarUsuarioWidgetState extends State<CadastrarUsuarioWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final CadastrarUsuarioController cuc = new CadastrarUsuarioController();
+    cuc = new CadastrarUsuarioController();
 
     // TODO: implement build
     return StreamBuilder(
         stream: cuc.outUser,
         builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
-          print('CHEGOU AQUI LOLOLO' + snapshot.data.toString());
+          //print('CHEGOU AQUI LOLOLO' + snapshot.data.toString());
           if (snapshot.data != null) {
             return StreamBuilder(
                 stream: cuc.outUser,
@@ -55,11 +57,12 @@ class _CadastrarUsuarioWidgetState extends State<CadastrarUsuarioWidget> {
                         key: scaffoldKey,
                         appBar: new AppBar(
                           title: new Text("Registro"),
+                          backgroundColor: Helpers.blue_default,
                         ),
                         floatingActionButtonLocation:
                             FloatingActionButtonLocation.centerDocked,
                         floatingActionButton: FloatingActionButton(
-                          backgroundColor: Colors.blue,
+                          backgroundColor: Helpers.blue_default,
                           onPressed: () {
                             // Validate will return true if the form is valid, or false if
                             // the form is invalid.
@@ -78,9 +81,7 @@ class _CadastrarUsuarioWidgetState extends State<CadastrarUsuarioWidget> {
 
                                   Future.delayed(Duration(seconds: 2))
                                       .then((v) {
-                                    /*Navigator.of(
-                                                                    context)
-                                                                .pop();*/
+                                    Navigator.of(context).pop();
                                   });
                                 } else if (value == 1) {
                                   scaffoldKey.currentState.showSnackBar(SnackBar(
@@ -107,13 +108,13 @@ class _CadastrarUsuarioWidgetState extends State<CadastrarUsuarioWidget> {
                             children: <Widget>[
                               IconButton(
                                 icon: Icon(Icons.search),
-                                color: Colors.blue,
-                                disabledColor: Colors.blue,
+                                color: Helpers.green_default,
+                                disabledColor: Helpers.green_default,
                                 onPressed: null,
                               ),
                             ],
                           ),
-                          color: Colors.blue,
+                          color: Helpers.green_default,
                         ),
                         body: new SingleChildScrollView(
                             child: new Padding(
@@ -140,6 +141,7 @@ class _CadastrarUsuarioWidgetState extends State<CadastrarUsuarioWidget> {
     final Pais p = Pais(0, 'Brasil', 'BR');
     final Estado e = Estado('Parana', 0, 'PR', 0, p);
     final Cidade c = Cidade('Tibagi', 1, 0, 0.0, 0.0, e);
+    final Cidade c1 = Cidade('Ponta Grossa', 2, 0, 0.0, 0.0, e);
     return new Column(children: <Widget>[
       Padding(
           padding: ei,
@@ -155,7 +157,7 @@ class _CadastrarUsuarioWidgetState extends State<CadastrarUsuarioWidget> {
                       padding: EdgeInsets.only(right: 11, left: 3),
                       child: Icon(
                         Icons.place,
-                        color: Colors.blue,
+                        color: Helpers.green_default,
                       )),
                   Expanded(
                     child: Container(
@@ -171,13 +173,13 @@ class _CadastrarUsuarioWidgetState extends State<CadastrarUsuarioWidget> {
                           ),
                           Icon(
                             Icons.arrow_downward,
-                            color: Colors.blue,
+                            color: Helpers.green_default,
                           ),
                         ],
                       ),
                       decoration: BoxDecoration(
                           border: Border.all(
-                              color: Colors.blue,
+                              color: Helpers.green_default,
                               style: BorderStyle.solid,
                               width: 1)),
                     ),
@@ -210,7 +212,7 @@ class _CadastrarUsuarioWidgetState extends State<CadastrarUsuarioWidget> {
                       padding: EdgeInsets.only(right: 11, left: 3),
                       child: Icon(
                         Icons.place,
-                        color: Colors.blue,
+                        color: Helpers.green_default,
                       )),
                   Expanded(
                     child: Container(
@@ -226,13 +228,13 @@ class _CadastrarUsuarioWidgetState extends State<CadastrarUsuarioWidget> {
                           ),
                           Icon(
                             Icons.arrow_downward,
-                            color: Colors.blue,
+                            color: Helpers.green_default,
                           ),
                         ],
                       ),
                       decoration: BoxDecoration(
                           border: Border.all(
-                              color: Colors.blue,
+                              color: Helpers.green_default,
                               style: BorderStyle.solid,
                               width: 1)),
                     ),
@@ -251,61 +253,77 @@ class _CadastrarUsuarioWidgetState extends State<CadastrarUsuarioWidget> {
                   )
                 ],
           )),
-      Padding(
-          padding: ei,
-          child: PopupMenuButton<Cidade>(
-            onSelected: (Cidade result) {},
-            initialValue: c,
-            child: Container(
-              width: MediaQuery.of(context).size.width * 03,
-              height: MediaQuery.of(context).size.height * .07,
-              child: Row(
-                children: <Widget>[
-                  Padding(
-                      padding: EdgeInsets.only(right: 11, left: 3),
-                      child: Icon(
-                        Icons.place,
-                        color: Colors.blue,
-                      )),
-                  Expanded(
-                    child: Container(
-                      height: 60,
-                      width: 40,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Padding(padding: EdgeInsets.only(left: 4)),
-                          Text(
-                            'Tibagi',
-                            style: TextStyle(fontSize: 14),
+      StreamBuilder(
+        stream: cuc.outCidade,
+        builder: (context, AsyncSnapshot<Cidade> snap) {
+          return Padding(
+              padding: ei,
+              child: PopupMenuButton<Cidade>(
+                onSelected: (Cidade result) {
+                  cuc.inCidade.add(result);
+                },
+                child: Container(
+                  width: MediaQuery.of(context).size.width * 03,
+                  height: MediaQuery.of(context).size.height * .07,
+                  child: Row(
+                    children: <Widget>[
+                      Padding(
+                          padding: EdgeInsets.only(right: 11, left: 3),
+                          child: Icon(
+                            Icons.place,
+                            color: Helpers.green_default,
+                          )),
+                      Expanded(
+                        child: Container(
+                          height: 60,
+                          width: 40,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Padding(padding: EdgeInsets.only(left: 4)),
+                              Text(
+                                snap.hasData
+                                    ? snap.data.cidade
+                                    : 'SELECIONE A CIDADE',
+                                style: TextStyle(fontSize: 14),
+                              ),
+                              Icon(
+                                Icons.arrow_downward,
+                                color: Helpers.green_default,
+                              ),
+                            ],
                           ),
-                          Icon(
-                            Icons.arrow_downward,
-                            color: Colors.blue,
-                          ),
-                        ],
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                  color: Helpers.green_default,
+                                  style: BorderStyle.solid,
+                                  width: 1)),
+                        ),
                       ),
-                      decoration: BoxDecoration(
-                          border: Border.all(
-                              color: Colors.blue,
-                              style: BorderStyle.solid,
-                              width: 1)),
-                    ),
+                    ],
                   ),
-                ],
-              ),
-            ),
-            itemBuilder: (BuildContext context) => <PopupMenuEntry<Cidade>>[
-                  PopupMenuItem<Cidade>(
-                    value: c,
-                    child: Container(
-                      child: Text(
-                        'Tibagi',
+                ),
+                itemBuilder: (BuildContext context) => <PopupMenuEntry<Cidade>>[
+                      PopupMenuItem<Cidade>(
+                        value: c,
+                        child: Container(
+                          child: Text(
+                            'Tibagi',
+                          ),
+                        ),
                       ),
-                    ),
-                  )
-                ],
-          ))
+                      PopupMenuItem<Cidade>(
+                        value: c1,
+                        child: Container(
+                          child: Text(
+                            'Ponta Grossa',
+                          ),
+                        ),
+                      ),
+                    ],
+              ));
+        },
+      )
     ]);
   }
 
@@ -327,7 +345,7 @@ class _CadastrarUsuarioWidgetState extends State<CadastrarUsuarioWidget> {
           decoration: InputDecoration(
               icon: Icon(
                 Icons.account_circle,
-                color: Colors.blue,
+                color: Helpers.green_default,
               ),
               border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(2.0)),
@@ -361,7 +379,7 @@ class _CadastrarUsuarioWidgetState extends State<CadastrarUsuarioWidget> {
           decoration: InputDecoration(
               icon: Icon(
                 Icons.email,
-                color: Colors.blue,
+                color: Helpers.green_default,
               ),
               border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(2.0)),
@@ -381,6 +399,7 @@ class _CadastrarUsuarioWidgetState extends State<CadastrarUsuarioWidget> {
         padding: ei,
         child: TextFormField(
           controller: controllerTelefone,
+          keyboardType: TextInputType.numberWithOptions(),
           validator: (value) {
             if (value.isEmpty) {
               return 'É Nescessario preencher o Celular';
@@ -396,7 +415,7 @@ class _CadastrarUsuarioWidgetState extends State<CadastrarUsuarioWidget> {
           decoration: InputDecoration(
               icon: Icon(
                 Icons.phone_android,
-                color: Colors.blue,
+                color: Helpers.green_default,
               ),
               border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(2.0)),
@@ -415,6 +434,7 @@ class _CadastrarUsuarioWidgetState extends State<CadastrarUsuarioWidget> {
       new Padding(
         padding: ei,
         child: TextFormField(
+          keyboardType: TextInputType.numberWithOptions(),
           controller: controllerDataNascimento,
           validator: (value) {
             if (value.isEmpty) {
@@ -435,7 +455,7 @@ class _CadastrarUsuarioWidgetState extends State<CadastrarUsuarioWidget> {
           decoration: InputDecoration(
               icon: Icon(
                 Icons.date_range,
-                color: Colors.blue,
+                color: Helpers.green_default,
               ),
               border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(2.0)),
@@ -470,7 +490,7 @@ class _CadastrarUsuarioWidgetState extends State<CadastrarUsuarioWidget> {
           decoration: InputDecoration(
               icon: Icon(
                 Icons.lock_outline,
-                color: Colors.blue,
+                color: Helpers.green_default,
               ),
               border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(2.0)),
@@ -509,7 +529,7 @@ class _CadastrarUsuarioWidgetState extends State<CadastrarUsuarioWidget> {
           decoration: InputDecoration(
               icon: Icon(
                 Icons.lock_outline,
-                color: Colors.blue,
+                color: Helpers.green_default,
               ),
               border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(2.0)),

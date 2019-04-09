@@ -88,14 +88,13 @@ class AddUpdateProtocolo {
                                     TextSpan(
                                         children: <TextSpan>[
                                           TextSpan(
-                                              text:
-                                                  '  Siga os passos para abaixo',
+                                              text: ' Siga os passos abaixo',
                                               style: TextStyle(
                                                   color: Colors.lightBlue,
                                                   fontWeight: FontWeight.bold)),
                                         ],
                                         text:
-                                            'Aqui você pode atualizar o status do deste Relato e notificar a todos os interessados a atual situação do problema,'),
+                                            'Aqui você pode atualizar o status deste Relato e notificar à todos os interessados a atual situação do problema.'),
                                     style: TextStyle(
                                         fontSize: 14.0, color: Colors.black),
                                     softWrap: true,
@@ -152,7 +151,7 @@ class AddUpdateProtocolo {
                                     TextSpan(
                                         children: <TextSpan>[],
                                         text:
-                                            'Marque está opção se o problema ainda não estiver sendo resolvido'),
+                                            'Marque está opção se o problema não estiver sendo resolvido'),
                                     style: TextStyle(
                                         fontSize: 14.0, color: Colors.black),
                                     softWrap: true,
@@ -241,7 +240,7 @@ class AddUpdateProtocolo {
                                                         fontWeight:
                                                             FontWeight.bold)),
                                                 TextSpan(
-                                                    text: 'Concluido',
+                                                    text: 'Concluído',
                                                     style: TextStyle(
                                                         color: Colors.lightBlue,
                                                         fontWeight:
@@ -254,7 +253,7 @@ class AddUpdateProtocolo {
                                                             FontWeight.bold)),
                                               ],
                                               text:
-                                                  'Este problema ja foi concluido'),
+                                                  'Este problema ja foi concluído'),
                                           style: TextStyle(
                                               fontSize: 14.0,
                                               color: Colors.black),

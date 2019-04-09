@@ -14,6 +14,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:latlong/latlong.dart';
 import 'package:share/share.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ActivityFeedItem extends StatelessWidget {
   Protocolo protocolo;
@@ -101,7 +102,7 @@ class ActivityFeedItem extends StatelessWidget {
                                   userLiked ? Icons.thumb_up : Icons.thumb_up,
                                   size: 25,
                                   color: userLiked
-                                      ? Colors.blue[500]
+                                      ? Helpers.green_default
                                       : Colors.grey,
                                 ),
                                 Padding(
@@ -114,7 +115,7 @@ class ActivityFeedItem extends StatelessWidget {
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                       color: userLiked
-                                          ? Colors.blue[500]
+                                          ? Helpers.green_default
                                           : Colors.grey,
                                       fontSize: 14),
                                 )
@@ -122,7 +123,7 @@ class ActivityFeedItem extends StatelessWidget {
                             ),
                           ),
                           iconSize: 40,
-                          color: Colors.blue[500],
+                          color: Helpers.green_default,
                           onPressed: () {
                             !userLiked
                                 ? apc.ApoiarProtocolo(post)
@@ -135,7 +136,7 @@ class ActivityFeedItem extends StatelessWidget {
                         ? new Container()
                         : IconButton(
                             icon: Icon(Icons.chat_bubble_outline),
-                            color: Colors.blue[500],
+                            color: Helpers.green_default,
                             onPressed: () {
                               Navigator.push(
                                   context,
@@ -146,13 +147,20 @@ class ActivityFeedItem extends StatelessWidget {
                           ),
                     IconButton(
                       icon: Icon(Icons.share),
-                      color: Colors.blue[500],
+                      color: Helpers.green_default,
                       onPressed: () {
                         Helpers.nh.getDL(post, true).then((link) {
                           Share.share('${link}');
                         }).catchError((err) {
                           print('error:${err.toString()}');
                         });
+                      },
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.directions),
+                      color: Helpers.green_default,
+                      onPressed: () {
+                        goToLocation(post);
                       },
                     ),
                   ],
@@ -213,11 +221,7 @@ class ActivityFeedItem extends StatelessWidget {
           Marker(
               point: LatLng(post.lat, post.lng),
               builder: (context) {
-                return Icon(
-                  Icons.place,
-                  color: Colors.blue,
-                  size: 35,
-                );
+                return getStatusWidget(post.status.descricao, post);
               })
         ]),
       ],
@@ -354,24 +358,86 @@ class ActivityFeedItem extends StatelessWidget {
     );
   }
 
+  Widget getStatusWidget(String status, Protocolo post) {
+    Color c;
+    Widget w;
+    //print('Status: ${status}');
+    switch (status) {
+      case 'Em Andamento':
+        c = Colors.lightBlueAccent;
+        w = Image(
+          image: AssetImage('assets/marker_yellow.png'),
+          height: 35,
+          width: 20,
+        );
+        break;
+
+      case 'Enviado':
+        c = Colors.yellowAccent;
+        w = Image(
+          image: AssetImage('assets/marker_yellow.png'),
+          height: 35,
+          width: 20,
+        );
+        break;
+
+      case 'Encaminhado':
+        c = Colors.orangeAccent;
+        w = Image(
+          image: AssetImage('assets/marker_blue.png'),
+          height: 35,
+          width: 20,
+        );
+        break;
+
+      case 'Concluído':
+        w = Image(
+          image: AssetImage('assets/marker_green.png'),
+          height: 35,
+          width: 20,
+        );
+        c = Colors.greenAccent;
+        break;
+
+      case 'Excluído':
+        c = Colors.red;
+        break;
+    }
+    return GestureDetector(
+        child: w,
+        onTap: () {
+          goToLocation(post);
+        });
+  }
+
+  Future goToLocation(Protocolo post) async {
+    final url =
+        'https://www.google.com/maps/search/?api=1&query=${post.lat},${post.lng}';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
   Widget getStatus(String status, BuildContext context) {
     Color c;
     //print('Status: ${status}');
     switch (status) {
       case 'Em Andamento':
-        c = Colors.lightBlueAccent;
+        c = Helpers.blue_default;
         break;
 
       case 'Enviado':
-        c = Colors.yellowAccent;
+        c = Helpers.yellow_default;
         break;
 
       case 'Encaminhado':
-        c = Colors.orangeAccent;
+        c = Helpers.blue_default;
         break;
 
       case 'Concluído':
-        c = Colors.greenAccent;
+        c = Helpers.green_default;
         break;
 
       case 'Excluído':
@@ -431,10 +497,12 @@ class ActivityFeedItem extends StatelessWidget {
         height: 15.0,
         width: 15.0,
         decoration: BoxDecoration(
-          color: i == selecionado ? Colors.blue : Colors.transparent,
+          color: i == selecionado ? Helpers.green_default : Colors.transparent,
           borderRadius: BorderRadius.all(Radius.circular(10.0)),
           border: Border.all(
-              color: Colors.blue, width: 1.0, style: BorderStyle.solid),
+              color: Helpers.green_default,
+              width: 1.0,
+              style: BorderStyle.solid),
         ),
       ));
     }
@@ -453,7 +521,7 @@ class ActivityFeedItem extends StatelessWidget {
             child: Text(
               '#' + tags[i].tag.tag_nome,
               style: TextStyle(
-                  fontStyle: FontStyle.italic, color: Colors.blue[900]),
+                  fontStyle: FontStyle.italic, color: Helpers.green_default),
             ),
           ),
         ));
@@ -486,7 +554,7 @@ class ActivityFeedItem extends StatelessWidget {
                 width: 50,
                 height: 50,
                 placeholder: Image.asset(
-                  'assets/logo_sem_texto_teste.png',
+                  'assets/logo.png',
                   width: 50,
                   height: 50,
                 ),

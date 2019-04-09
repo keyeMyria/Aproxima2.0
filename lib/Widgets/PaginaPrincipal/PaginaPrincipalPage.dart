@@ -101,7 +101,7 @@ class _ModoListaPageState extends State<ModoListaPage> {
                             MaterialButton(
                               child: Text(
                                 'Cancelar',
-                                style: TextStyle(color: Colors.blue),
+                                style: TextStyle(color: Helpers.blue_default),
                               ),
                               onPressed: () {
                                 Navigator.pop(context);
@@ -125,10 +125,10 @@ class _ModoListaPageState extends State<ModoListaPage> {
                         FloatingActionButtonLocation.centerDocked,
                     floatingActionButton: FloatingActionButton(
                       tooltip: 'Adicionar Relato',
-                      backgroundColor: Colors.blue,
-                      child: const Icon(
+                      backgroundColor: Colors.white,
+                      child: Icon(
                         Icons.add_circle_outline,
-                        color: Colors.white,
+                        color: Helpers.green_default,
                         size: 45,
                       ),
                       onPressed: () {
@@ -150,7 +150,7 @@ class _ModoListaPageState extends State<ModoListaPage> {
                         onPageChanged: onPageChanged),
                     bottomNavigationBar: BottomAppBar(
                         shape: CircularNotchedRectangle(),
-                        color: Colors.blue,
+                        color: Colors.white,
                         child: new Row(
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -163,12 +163,15 @@ class _ModoListaPageState extends State<ModoListaPage> {
                                         children: <Widget>[
                                           snapshot.data == 0
                                               ? Shimmer.fromColors(
-                                                  baseColor: Colors.white,
-                                                  highlightColor:
-                                                      Colors.grey[500],
-                                                  child:
-                                                      Icon(Icons.notifications))
-                                              : Icon(Icons.notifications),
+                                                  baseColor:
+                                                      Helpers.green_default,
+                                                  highlightColor: Colors.white,
+                                                  child: Icon(
+                                                      Icons.notifications,
+                                                      color: Helpers
+                                                          .green_default))
+                                              : Icon(Icons.notifications,
+                                                  color: Helpers.green_default),
                                           Positioned(
                                             child: StreamBuilder(
                                                 stream: bc.outBadge,
@@ -204,7 +207,7 @@ class _ModoListaPageState extends State<ModoListaPage> {
                                       ),
                                       color:
                                           snapshot.data == 0 ? c : Colors.white,
-                                      iconSize: 35,
+                                      iconSize: 25,
                                       onPressed: () {
                                         onTap(0);
                                         bc.removeBadges();
@@ -215,7 +218,10 @@ class _ModoListaPageState extends State<ModoListaPage> {
                                       icon: Stack(
                                         alignment: Alignment.center,
                                         children: <Widget>[
-                                          Icon(Icons.notifications),
+                                          Icon(
+                                            Icons.notifications,
+                                            color: Helpers.green_default,
+                                          ),
                                           Positioned(
                                             child: StreamBuilder(
                                                 stream: bc.outBadge,
@@ -250,7 +256,7 @@ class _ModoListaPageState extends State<ModoListaPage> {
                                         ],
                                       ),
                                       color: Colors.white,
-                                      iconSize: 35,
+                                      iconSize: 30,
                                       onPressed: () {
                                         onTap(0);
                                         bc.removeBadges();
@@ -258,20 +264,20 @@ class _ModoListaPageState extends State<ModoListaPage> {
                                     ),
                               snapshot.data == 1
                                   ? Shimmer.fromColors(
-                                      baseColor: Colors.white,
-                                      highlightColor: Colors.grey[500],
+                                      baseColor: Helpers.green_default,
+                                      highlightColor: Colors.white,
                                       child: IconButton(
                                         tooltip: 'Feed de Relatos',
                                         icon: new Icon(Icons.dehaze),
-                                        color: Colors.white,
-                                        iconSize: 35,
+                                        color: Helpers.green_default,
+                                        iconSize: 30,
                                         onPressed: () => onTap(1),
                                       ))
                                   : IconButton(
                                       tooltip: 'Feed de Relatos',
                                       icon: new Icon(Icons.dehaze),
-                                      color: Colors.white,
-                                      iconSize: 35,
+                                      color: Helpers.green_default,
+                                      iconSize: 30,
                                       onPressed: () => onTap(1),
                                     ),
                               Padding(
@@ -279,40 +285,40 @@ class _ModoListaPageState extends State<ModoListaPage> {
                               ),
                               snapshot.data == 2
                                   ? Shimmer.fromColors(
-                                      baseColor: Colors.white,
-                                      highlightColor: Colors.grey[500],
+                                      baseColor: Helpers.green_default,
+                                      highlightColor: Colors.white,
                                       child: IconButton(
                                         tooltip: 'Mapa da Cidade',
                                         icon: new Icon(Icons.map),
-                                        color: Colors.white,
-                                        iconSize: 35,
+                                        color: Helpers.green_default,
+                                        iconSize: 30,
                                         onPressed: () => onTap(2),
                                       ),
                                     )
                                   : IconButton(
                                       tooltip: 'Mapa da Cidade',
                                       icon: new Icon(Icons.map),
-                                      color: Colors.white,
-                                      iconSize: 35,
+                                      color: Helpers.green_default,
+                                      iconSize: 30,
                                       onPressed: () => onTap(2),
                                     ),
                               snapshot.data == 3
                                   ? Shimmer.fromColors(
-                                      baseColor: Colors.white,
-                                      highlightColor: Colors.grey[500],
+                                      baseColor: Helpers.green_default,
+                                      highlightColor: Colors.white,
                                       child: IconButton(
                                         tooltip: 'Perfil',
                                         icon: new Icon(Icons.people),
-                                        color: Colors.white,
-                                        iconSize: 35,
+                                        color: Helpers.green_default,
+                                        iconSize: 30,
                                         onPressed: () => onTap(3),
                                       ),
                                     )
                                   : IconButton(
                                       tooltip: 'Perfil',
                                       icon: new Icon(Icons.people),
-                                      color: Colors.white,
-                                      iconSize: 35,
+                                      color: Helpers.green_default,
+                                      iconSize: 30,
                                       onPressed: () => onTap(3),
                                     )
 

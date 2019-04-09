@@ -3,6 +3,7 @@ import 'package:aproxima/Objetos/News.dart';
 import 'package:aproxima/Telas/UserProfile/friend_details_page.dart';
 import 'package:aproxima/Widgets/News/NewsController.dart';
 import 'package:bloc_pattern/bloc_pattern.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
@@ -55,18 +56,24 @@ class _NewsWidgeteState extends State<NewsWidget> {
               ));
         },
         child: Padding(
-          padding: EdgeInsets.only(left: 5),
-          child: CircleAvatar(
-            radius: 20.0,
-            backgroundImage: NetworkImage(
-                'https://firebasestorage.googleapis.com/v0/b/aproximamais-b84ee.appspot.com/o/usuarios%2F${n.Responsavel.id}.jpeg?alt=media&token=5cae4fd3-d3d4-44e4-893a-2349f6fda687'),
-          ),
+          padding: EdgeInsets.only(left: 25),
+          child: CachedNetworkImage(
+              fit: BoxFit.fill,
+              width: 50,
+              height: 50,
+              placeholder: Image.asset(
+                'assets/logo.png',
+                width: 50,
+                height: 50,
+              ),
+              imageUrl:
+                  'https://firebasestorage.googleapis.com/v0/b/aproximamais-b84ee.appspot.com/o/usuarios%2F${n.Responsavel.id}.jpeg?alt=media&token=5cae4fd3-d3d4-44e4-893a-2349f6fda687'),
         ),
       ),
-      new Padding(padding: EdgeInsets.only(right: 10)),
+      new Padding(padding: EdgeInsets.only(right: 5)),
       Expanded(
           child: Padding(
-              padding: EdgeInsets.only(left: 8.0),
+              padding: EdgeInsets.only(left: 5.0),
               child: GestureDetector(
                   onTap: () {
                     nc.openNews(n, context);

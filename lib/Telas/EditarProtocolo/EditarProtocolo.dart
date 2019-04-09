@@ -37,79 +37,81 @@ class _EditarProtocoloState extends State<EditarProtocolo> {
           enderecoController.text = snap.data.endereco;
         }
         return Scaffold(
-          resizeToAvoidBottomPadding: false,
-          appBar: AppBar(
-            title: Text('Editar Protocolo'),
-            actions: <Widget>[
-              IconButton(
-                  icon: Icon(Icons.check),
-                  onPressed: () {
-                    applyChanges(snap.data);
-                  }),
-            ],
-          ),
-          body: Column(
-            children: <Widget>[
-              Padding(
-                padding: EdgeInsets.only(top: 10),
+            resizeToAvoidBottomPadding: false,
+            appBar: AppBar(
+              title: Text('Editar Protocolo'),
+              actions: <Widget>[
+                IconButton(
+                    icon: Icon(Icons.check),
+                    onPressed: () {
+                      applyChanges(snap.data);
+                    }),
+              ],
+            ),
+            body: SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.only(top: 10),
+                  ),
+                  Padding(
+                    padding: ei,
+                    child: TextFormField(
+                      controller: tituloController,
+                      decoration: InputDecoration(
+                          icon: Icon(
+                            Icons.border_color,
+                            color: Colors.blue,
+                          ),
+                          border: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(5.0)),
+                              borderSide: BorderSide(
+                                  color: Colors.black,
+                                  width: 1.0,
+                                  style: BorderStyle.solid)),
+                          hintText: 'Buraco',
+                          labelText: 'Titulo',
+                          hintStyle: TextStyle(
+                              fontSize: 14.0,
+                              color: Colors.grey,
+                              fontStyle: FontStyle.italic)),
+                    ),
+                  ),
+                  Padding(
+                      padding: ei,
+                      child: TextFormField(
+                        controller: descricaoController,
+                        decoration: InputDecoration(
+                            icon: Icon(
+                              Icons.rate_review,
+                              color: Colors.blue,
+                            ),
+                            border: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(5.0)),
+                                borderSide: BorderSide(
+                                    color: Colors.black,
+                                    width: 1.0,
+                                    style: BorderStyle.solid)),
+                            hintText: 'Buraco na via',
+                            labelText: 'Descrição',
+                            hintStyle: TextStyle(
+                                fontSize: 14.0,
+                                color: Colors.grey,
+                                fontStyle: FontStyle.italic)),
+                      )),
+                  TagsWidget(
+                    tags: widget.p.tags,
+                    EditarProtocolo: true,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 5),
+                  ),
+                  PickLocationWidget()
+                ],
               ),
-              Padding(
-                padding: ei,
-                child: TextFormField(
-                  controller: tituloController,
-                  decoration: InputDecoration(
-                      icon: Icon(
-                        Icons.border_color,
-                        color: Colors.blue,
-                      ),
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                          borderSide: BorderSide(
-                              color: Colors.black,
-                              width: 1.0,
-                              style: BorderStyle.solid)),
-                      hintText: 'Buraco',
-                      labelText: 'Titulo',
-                      hintStyle: TextStyle(
-                          fontSize: 14.0,
-                          color: Colors.grey,
-                          fontStyle: FontStyle.italic)),
-                ),
-              ),
-              Padding(
-                  padding: ei,
-                  child: TextFormField(
-                    controller: descricaoController,
-                    decoration: InputDecoration(
-                        icon: Icon(
-                          Icons.rate_review,
-                          color: Colors.blue,
-                        ),
-                        border: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(5.0)),
-                            borderSide: BorderSide(
-                                color: Colors.black,
-                                width: 1.0,
-                                style: BorderStyle.solid)),
-                        hintText: 'Buraco na via',
-                        labelText: 'Descrição',
-                        hintStyle: TextStyle(
-                            fontSize: 14.0,
-                            color: Colors.grey,
-                            fontStyle: FontStyle.italic)),
-                  )),
-              TagsWidget(
-                tags: widget.p.tags,
-                EditarProtocolo: true,
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: 5),
-              ),
-              PickLocationWidget()
-            ],
-          ),
-        );
+            ));
       },
     );
   }

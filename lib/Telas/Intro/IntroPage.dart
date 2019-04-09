@@ -1,3 +1,4 @@
+import 'package:aproxima/Helpers/Helpers.dart';
 import 'package:aproxima/Widgets/PaginaPrincipal/PaginaPrincipalPage.dart';
 import 'package:drawing_animation/drawing_animation.dart';
 import 'package:flutter/material.dart';
@@ -82,7 +83,7 @@ class SvgDrawingWithCustomControllerState
         height: 300,
         width: 300,
         decoration: new BoxDecoration(
-          color: Colors.blue,
+          color: Helpers.green_default,
         ),
         child: GestureDetector(
           onTap: () {

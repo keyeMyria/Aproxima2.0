@@ -30,8 +30,8 @@ android {
         minSdkVersion 21
         targetSdkVersion 28
         multiDexEnabled true
-        versionCode 4000
-        versionName "2.7.0"
+        versionCode 4700
+        versionName "2.9.2"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     signingConfigs {

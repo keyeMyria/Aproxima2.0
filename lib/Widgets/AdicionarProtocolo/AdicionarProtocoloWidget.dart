@@ -15,6 +15,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:latlong/latlong.dart';
 import 'package:path_provider/path_provider.dart';
@@ -55,6 +57,7 @@ class _AdicionarProtocoloWidgetState extends State<AdicionarProtocoloWidget>
     super.initState();
     pageController = new PageController(initialPage: this.page, keepPage: true);
     _longPressRecognizer = TapGestureRecognizer()..onTap = _handlePress;
+    CheckGPS();
   }
 
   void _handlePress() {
@@ -222,26 +225,24 @@ class _AdicionarProtocoloWidgetState extends State<AdicionarProtocoloWidget>
             }
           })
     ]);
-    page2 = SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Column(
-          children: <Widget>[
-            Padding(
-              padding: EdgeInsets.all(10),
-              child: Text.rich(
-                TextSpan(
-                    text: 'Agora escolha o assunto relacionado ao seu Relato',
-                    style: TextStyle(
-                        fontSize: 24,
-                        fontStyle: FontStyle.normal,
-                        fontWeight: FontWeight.bold),
-                    children: []),
-                textAlign: TextAlign.center,
-              ),
-            ),
-            TagsWidget()
-          ],
-        ));
+    page2 = Column(
+      children: <Widget>[
+        Padding(
+          padding: EdgeInsets.all(10),
+          child: Text.rich(
+            TextSpan(
+                text: 'Agora escolha o assunto relacionado ao seu Relato',
+                style: TextStyle(
+                    fontSize: 24,
+                    fontStyle: FontStyle.normal,
+                    fontWeight: FontWeight.bold),
+                children: []),
+            textAlign: TextAlign.center,
+          ),
+        ),
+        TagsWidget()
+      ],
+    );
 
     page4 = SingleChildScrollView(
       child: Column(
@@ -250,7 +251,7 @@ class _AdicionarProtocoloWidgetState extends State<AdicionarProtocoloWidget>
             padding: EdgeInsets.fromLTRB(10, 5, 10, 0),
             child: Text.rich(
               TextSpan(
-                text: 'Uma Ultima coisa!  \n\n Descreva o seu problema \n\n',
+                text: 'Uma Última  coisa!  \n\n Descreva o seu problema \n\n',
                 style: TextStyle(
                     fontSize: 24,
                     fontStyle: FontStyle.normal,
@@ -372,6 +373,64 @@ class _AdicionarProtocoloWidgetState extends State<AdicionarProtocoloWidget>
                                   DescricaoController.text != '') {
                                 if (TituloController.text != null ||
                                     TituloController.text != '') {
+                                  apc.inLoading.add('Preparando Dados!');
+                                  showDialog(
+                                      context: context,
+                                      barrierDismissible: false,
+                                      builder: (BuildContext context) {
+                                        // return object of type Dialog
+                                        return AlertDialog(
+                                          title: StreamBuilder(
+                                            builder: (context, snap) {
+                                              if (snap.hasData) {
+                                                return Row(
+                                                  children: <Widget>[
+                                                    new SpinKitHourGlass(
+                                                      color:
+                                                          Helpers.green_default,
+                                                      size: 35,
+                                                    ),
+                                                    Expanded(
+                                                      child: Text(
+                                                        snap.data,
+                                                        style: TextStyle(
+                                                            color: Helpers
+                                                                .green_default,
+                                                            fontSize: 22,
+                                                            fontStyle: FontStyle
+                                                                .italic),
+                                                      ),
+                                                    )
+                                                  ],
+                                                );
+                                              } else {
+                                                return Row(
+                                                  children: <Widget>[
+                                                    new SpinKitHourGlass(
+                                                      color:
+                                                          Helpers.green_default,
+                                                      size: 35,
+                                                    ),
+                                                    Expanded(
+                                                      child: Text(
+                                                        'Procurando Relatos Similares',
+                                                        style: TextStyle(
+                                                            color: Helpers
+                                                                .green_default,
+                                                            fontSize: 22,
+                                                            fontStyle: FontStyle
+                                                                .italic),
+                                                      ),
+                                                    )
+                                                  ],
+                                                );
+                                                ;
+                                              }
+                                            },
+                                            stream: apc.outLoading,
+                                          ),
+                                        );
+                                      });
                                   apc.CadastrarProtocolo(
                                           DescricaoController.text,
                                           TituloController.text)
@@ -399,9 +458,10 @@ class _AdicionarProtocoloWidgetState extends State<AdicionarProtocoloWidget>
                                       case 6:
                                         //TODO TUDO CERTO;
                                         Navigator.of(context).pop();
+                                        Navigator.of(context).pop();
                                         Helpers.nh.sendNotification({
                                           'title':
-                                              '${Helpers.user.nome} Fez um Relato ${apc.protocolo.titulo}',
+                                              '${Helpers.user.nome} fez um Relato ${apc.protocolo.titulo}',
                                           'responsavel':
                                               json.encode(Helpers.user),
                                           'tipo': 0.toString(),
@@ -755,8 +815,16 @@ class _AdicionarProtocoloWidgetState extends State<AdicionarProtocoloWidget>
                   // return object of type Dialog
                   return AlertDialog(
                       shape: Border.all(),
-                      title: new Text(
-                        'Nenhuma foto Selecionada',
+                      title: Row(
+                        children: <Widget>[
+                          new Text(
+                            'Nenhuma foto Selecionada',
+                            style: TextStyle(
+                                color: Helpers.green_default,
+                                fontSize: 22,
+                                fontStyle: FontStyle.italic),
+                          ),
+                        ],
                       ),
                       actions: <Widget>[
                         MaterialButton(
@@ -818,8 +886,12 @@ class _AdicionarProtocoloWidgetState extends State<AdicionarProtocoloWidget>
               // return object of type Dialog
               return AlertDialog(
                   shape: Border.all(),
-                  title: new Text(
-                    'Nenhum Assunto Selecionado',
+                  title: Text(
+                    'Nenhuma foto Selecionada',
+                    style: TextStyle(
+                        color: Helpers.green_default,
+                        fontSize: 22,
+                        fontStyle: FontStyle.italic),
                   ),
                   actions: <Widget>[
                     MaterialButton(
@@ -873,6 +945,32 @@ class _AdicionarProtocoloWidgetState extends State<AdicionarProtocoloWidget>
     } else if (pageController.page == 2) {
       onPageChanged(3);
     }
+  }
+
+  Future CheckGPS() async {
+    var geoLocator = Geolocator();
+    var status = await geoLocator.checkGeolocationPermissionStatus();
+
+    if (status == GeolocationStatus.denied) {
+      print('STATUS ${status}');
+    }
+    // Take user to permission settings
+    else if (status == GeolocationStatus.disabled) {
+      print('STATUS ${status}');
+    }
+    // Take user to location page
+    else if (status == GeolocationStatus.restricted) {
+      print('STATUS ${status}');
+    }
+    // Restricted
+    else if (status == GeolocationStatus.unknown) {
+      print('STATUS ${status}');
+    }
+    // Unknown
+    else if (status == GeolocationStatus.granted) {
+      print('STATUS ${status}');
+    }
+    // Permission granted and location enabled
   }
 }
 

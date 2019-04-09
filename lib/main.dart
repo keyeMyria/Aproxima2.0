@@ -2,11 +2,12 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:aproxima/Helpers/Helpers.dart';
-import 'package:aproxima/Telas/Login/Login.dart';
+import 'package:aproxima/Telas/SplashScreen/SplashScreen.dart';
 import 'package:aproxima/Widgets/AdicionarProtocolo/AdicionarProtocoloWidget.dart';
 import 'package:camera/camera.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 Future<void> main() async {
   final FirebaseApp app = await FirebaseApp.configure(
@@ -36,16 +37,14 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(
+        SystemUiOverlayStyle(statusBarColor: Helpers.blue_default));
     return new MaterialApp(
-      color: Colors.blueAccent,
-      theme: new ThemeData(
-          primarySwatch: Colors.blue,
-          splashColor: Colors.blue,
-          backgroundColor: Colors.blueAccent,
-          accentColor: Colors.blueAccent,
-          accentColorBrightness: Brightness.light,
-          primaryColor: Colors.blueAccent),
-      home: new LoginPage(),
+      color: Helpers.blue_default,
+      theme: ThemeData(
+          accentColor: Helpers.green_default,
+          primaryColor: Helpers.blue_default),
+      home: SplashScreen(),
       debugShowCheckedModeBanner: false,
     );
   }

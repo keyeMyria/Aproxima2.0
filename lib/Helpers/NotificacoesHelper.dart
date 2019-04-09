@@ -21,8 +21,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class NotificacoesHelper {
   static FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
-  String iconPath = 'logo_branca';
-  String largeIconPath = 'logo_preta';
+  String iconPath = 'logo';
+  String largeIconPath = 'logo';
 
   static News news;
   sendNotification(Map<String, dynamic> body) {
@@ -46,6 +46,7 @@ class NotificacoesHelper {
       importance: Importance.Max,
       priority: Priority.High,
       icon: iconPath,
+      color: Colors.white,
       largeIcon: largeIconPath,
       playSound: true,
     );
@@ -119,7 +120,7 @@ class NotificacoesHelper {
         largeIcon: 'sample_large_icon',
         largeIconBitmapSource: BitmapSource.Drawable,
         vibrationPattern: vibrationPattern,
-        color: const Color.fromARGB(255, 255, 0, 0));
+        color: Colors.white);
     var iOSPlatformChannelSpecifics =
         new IOSNotificationDetails(sound: "slow_spring_board.aiff");
     var platformChannelSpecifics = new NotificationDetails(
@@ -368,40 +369,39 @@ class NotificacoesHelper {
 
   Future showDailyAtTime() async {
     SharedPreferences.getInstance().then((sp) async {
-    if(!sp.getBool('${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}')) {
-      var horarios = [
-        Time(next(11, 12), next(0, 30)),
-        Time(next(18, 19), next(0, 60))
-      ];
+      if (sp.getBool(
+              '${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}') ==
+          null) {
+        var horarios = [
+          Time(next(11, 12), next(0, 30)),
+          Time(next(18, 19), next(0, 60))
+        ];
 
-      var time = horarios[next(0, 1)];
-      var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
-        'repeatDailyAtTime channel id',
-        'repeatDailyAtTime channel name',
-        'repeatDailyAtTime description',
-        icon: iconPath,
-        largeIcon: largeIconPath,
-      );
-      var iOSPlatformChannelSpecifics = new IOSNotificationDetails();
-      var platformChannelSpecifics = new NotificationDetails(
-          androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
-      News n = new News('0', '', DateTime.now(), 4, Helpers.aproximaUser, '');
-      await flutterLocalNotificationsPlugin.showDailyAtTime(
-          0,
-          'Reporte um problema',
-          'Encontrou algum problema hoje?',
-          time,
-          platformChannelSpecifics,
-          payload: '');
-      print('Saiu AQUI AQUI');
-      sp.setBool('${DateTime
-          .now()
-          .day}/${DateTime
-          .now()
-          .month}/${DateTime
-          .now()
-          .year}', true);
-    }
+        var time = horarios[next(0, 1)];
+        var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
+          'repeatDailyAtTime channel id',
+          'repeatDailyAtTime channel name',
+          'repeatDailyAtTime description',
+          icon: iconPath,
+          color: Colors.white,
+          largeIcon: largeIconPath,
+        );
+        var iOSPlatformChannelSpecifics = new IOSNotificationDetails();
+        var platformChannelSpecifics = new NotificationDetails(
+            androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+        News n = new News('0', '', DateTime.now(), 4, Helpers.aproximaUser, '');
+        await flutterLocalNotificationsPlugin.showDailyAtTime(
+            0,
+            'Reporte um problema',
+            'Encontrou algum problema hoje?',
+            time,
+            platformChannelSpecifics,
+            payload: '');
+        print('Saiu AQUI AQUI');
+        sp.setBool(
+            '${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}',
+            true);
+      }
     });
   }
 
